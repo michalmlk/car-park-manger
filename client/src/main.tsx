@@ -1,6 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import {RouterProvider, createBrowserRouter} from 'react-router-dom'
+import './index.css'
+import './fonts.scss'
 
 // Import the layouts
 import RootLayout from './layouts/root-layout'

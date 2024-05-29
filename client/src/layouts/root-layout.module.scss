@@ -1,0 +1,17 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'Roboto-bold', sans-serif;
+  font-weight: bold;
+  padding: 1rem;
+  height: 60px;
+
+  background-color: #d7d7d7;
+}
+
+.page-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

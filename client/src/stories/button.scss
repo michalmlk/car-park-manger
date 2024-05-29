@@ -1,0 +1,43 @@
+.shared-button {
+  font-family: 'Roboto-regular', 'Helvetica', sans-serif;
+  font-weight: normal;
+  border: 0;
+  cursor: pointer;
+  display: inline-block;
+  transition: background-color .2s ease;
+
+  &.primary {
+    color: white;
+    background-color: #1ea7fd;
+
+    &:hover {
+      background-color: #0490e7;
+    }
+  }
+
+  &.secondary {
+    color: #1ea7fd;
+    background-color: transparent;
+    border: 1px solid #1ea7fd;
+
+    &:hover {
+      background-color: #eae9e9;
+    }
+  }
+
+  &.small {
+    font-size: 12px;
+    padding: 10px 16px;
+  }
+
+  &.medium {
+    font-size: 14px;
+    padding: 11px 20px;
+  }
+
+  &.large {
+    font-size: 16px;
+    padding: 12px 24px;
+  }
+}
+
