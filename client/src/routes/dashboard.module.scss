@@ -1,0 +1,33 @@
+.page-wrapper {
+  display: flex;
+  flex-direction: column;
+
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .header {
+    font-size: var(--font-size-xl);
+    color: var(--color-font);
+  }
+
+  .info-header {
+    font-size: var(--font-size-l);
+    font-weight: var(--font-weight-normal);
+    color: var(--color-font);
+  }
+
+  .reservation-container {
+    margin: var(--spacing-xl) 0;
+  }
+
+  .reservation-list {
+    .info-header {
+      color: var(--color-primary);
+      font-weight: var(--font-weight-normal);
+    }
+  }
+}

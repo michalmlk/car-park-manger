@@ -4,3 +4,37 @@ body, * {
     box-sizing: border-box;
     font-family: 'Roboto-regular', sans-serif;
 }
+
+:root {
+    --color-primary: #000C7B;
+    --color-accent: #3E6F27;
+    --color-font: #434343;
+
+    --spacing-xs: 10px;
+    --spacing-s: 15px;
+    --spacing-m: 20px;
+    --spacing-l: 30px;
+    --spacing-xl: 40px;
+
+    --font-size-xl: 48px;
+    --font-size-l: 32px;
+    --font-size-m: 24px;
+    --font-size-s: 14px;
+
+    --font-weight-light: 300;
+    --font-weight-normal: 400;
+    --font-weight-bold: 700;
+
+    --button-color-primary: #000C7B;
+    --button-color-primary--hover: #010856;
+    --button-color-border: var(--color-primary);
+
+    --button-color-secondary: #ffffff;
+    --button-color-secondary--hover: #f2f6ff;
+
+    --button-font-size-large: 16px;
+    --button-font-size-small: 12px;
+    --button-font-size-medium: 14px;
+
+    --main-section-padding: var(--spacing-xl) 4rem;
+}

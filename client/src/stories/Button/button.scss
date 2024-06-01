@@ -1,0 +1,54 @@
+.shared-button {
+  font-family: 'Roboto-regular', 'Helvetica', sans-serif;
+  font-weight: normal;
+  border: 0;
+  cursor: pointer;
+  display: inline-block;
+  transition: background-color .2s ease;
+
+
+  &.primary {
+    color: white;
+    background-color: var(--button-color-primary);
+
+    a {
+      text-decoration: none;
+      color: white;
+    }
+
+    &:hover {
+      background-color: var(--button-color-primary--hover);
+    }
+  }
+
+  &.secondary {
+    color: var(--color-primary);
+    background-color: transparent;
+    border: 1px solid var(--button-color-border);
+
+    a {
+      text-decoration: none;
+      color: var(--color-primary);
+    }
+
+    &:hover {
+      background-color: var(--button-color-secondary--hover);
+    }
+  }
+
+  &.small {
+    font-size: var(--button-font-size-small);
+    padding: var(--spacing-xs) var(--spacing-s);
+  }
+
+  &.medium {
+    font-size: var(--button-font-size-medium);
+    padding: var(--spacing-xs) var(--spacing-m);
+  }
+
+  &.large {
+    font-size: var(--button-font-size-large);
+    padding: var(--spacing-s) var(--spacing-l);
+  }
+}
+

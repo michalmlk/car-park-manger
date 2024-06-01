@@ -1,39 +1,41 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import {RouterProvider, createBrowserRouter} from 'react-router-dom'
-import './index.css'
-import './fonts.scss'
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { RouterProvider, createBrowserRouter, Navigate } from 'react-router-dom';
+import './index.css';
+import './styles/fonts.scss';
 
 // Import the layouts
-import RootLayout from './layouts/root-layout'
-import DashboardLayout from './layouts/dashboard-layout'
+import RootLayout from './layouts/root-layout';
+import DashboardLayout from './layouts/dashboard-layout';
 
 // Import the components
-import IndexPage from './routes'
-import SignInPage from './routes/sign-in'
-import SignUpPage from './routes/sign-up'
-import DashboardPage from './routes/dashboard'
+import SignInPage from './routes/sign-in';
+import SignUpPage from './routes/sign-up';
+import DashboardPage from './routes/dashboard';
 
 const router = createBrowserRouter([
     {
-        element: <RootLayout/>,
+        element: <RootLayout />,
         children: [
-            {path: "/", element: <IndexPage/>},
-            {path: "/sign-in/*", element: <SignInPage/>},
-            {path: "/sign-up/*", element: <SignUpPage/>},
+            { path: '/', element: <Navigate to="/dashboard" /> },
+            { path: '/sign-in/*', element: <SignInPage /> },
+            { path: '/sign-up/*', element: <SignUpPage /> },
             {
-                element: <DashboardLayout/>,
-                path: "dashboard",
+                element: <DashboardLayout />,
+                path: 'dashboard',
                 children: [
-                    {path: "/dashboard", element: <DashboardPage/>},
-                ]
-            }
-        ]
-    }
-])
+                    {
+                        path: '/dashboard',
+                        element: <DashboardPage />,
+                    },
+                ],
+            },
+        ],
+    },
+]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
-        <RouterProvider router={router}/>
-    </React.StrictMode>,
-)
+        <RouterProvider router={router} />
+    </React.StrictMode>
+);

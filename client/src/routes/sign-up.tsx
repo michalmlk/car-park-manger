@@ -1,5 +1,10 @@
-import { SignUp } from "@clerk/clerk-react"
+import { SignUp } from '@clerk/clerk-react';
+import styles from './clerk.module.scss';
 
 export default function SignUpPage() {
-    return <SignUp path="/sign-up" />;
+    return (
+        <div className={styles['clerk-auth-wrapper']}>
+            <SignUp path="/sign-in" fallbackRedirectUrl="/dashboard" />
+        </div>
+    );
 }

@@ -1,12 +1,12 @@
-import {Outlet, useNavigate} from 'react-router-dom'
-import {ClerkProvider, SignedIn, SignedOut, UserButton} from '@clerk/clerk-react'
+import { Link, Outlet, useNavigate } from 'react-router-dom';
+import { ClerkProvider, SignedIn, SignedOut, UserButton } from '@clerk/clerk-react';
 import styles from './root-layout.module.scss';
-import {Button} from "../stories/Button.tsx";
+import { Button } from '../stories/Button/Button.tsx';
 
-const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
+const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
 if (!PUBLISHABLE_KEY) {
-    throw new Error("Missing Publishable Key")
+    throw new Error('Missing Publishable Key');
 }
 
 export default function RootLayout() {
@@ -15,25 +15,27 @@ export default function RootLayout() {
     return (
         <ClerkProvider
             routerPush={(to) => navigate(to)}
-            routerReplace={(to) => navigate(to, {replace: true})}
+            routerReplace={(to) => navigate(to, { replace: true })}
             publishableKey={PUBLISHABLE_KEY}
         >
-            <header className={styles.header}>
-                <div>
-                    <p>Clerk + React + React Router App</p>
-                </div>
-                <div>
-                    <SignedIn>
-                        <UserButton afterSignOutUrl='/sign-in'/>
-                    </SignedIn>
-                    <SignedOut>
-                        <Button label="Sign in"/>
-                    </SignedOut>
-                </div>
-            </header>
-            <main>
-                <Outlet/>
-            </main>
+            <div className={styles['root-content']}>
+                <header className={styles['top-bar']}>
+                    <p>Car park</p>
+                    <div>
+                        <SignedIn>
+                            <UserButton afterSignOutUrl="/sign-in" />
+                        </SignedIn>
+                        <SignedOut>
+                            <Button primary>
+                                <Link to="/sign-up">Sign up</Link>
+                            </Button>
+                        </SignedOut>
+                    </div>
+                </header>
+                <main className={styles['page-content']}>
+                    <Outlet />
+                </main>
+            </div>
         </ClerkProvider>
-    )
+    );
 }
