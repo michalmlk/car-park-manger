@@ -6,7 +6,6 @@ const reservationsRouter = Router();
 reservationsRouter.get("/getAll", async (req, res) => {
   try {
     const reservationsList = await Reservation.find();
-    console.log(reservationsList);
     return res.status(200).json(reservationsList);
   } catch (e) {
     res.status(401).json({ error: "No reservations found" });

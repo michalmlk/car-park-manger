@@ -11,7 +11,8 @@ import DashboardLayout from './layouts/dashboard-layout';
 // Import the components
 import SignInPage from './routes/sign-in';
 import SignUpPage from './routes/sign-up';
-import DashboardPage from './routes/dashboard';
+import DashboardPage from './routes/dashboard/dashboard.tsx';
+import CreateReservationPage from './routes/create-reservation/create-reservation.tsx';
 
 const router = createBrowserRouter([
     {
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
                     {
                         path: '/dashboard',
                         element: <DashboardPage />,
+                    },
+                    {
+                        path: '/dashboard/create',
+                        element: <CreateReservationPage />,
                     },
                 ],
             },
