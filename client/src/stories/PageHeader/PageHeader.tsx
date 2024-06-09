@@ -1,6 +1,6 @@
 import { IconButton } from '@mui/material';
 import styles from './PageHeader.module.scss';
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { ArrowBack } from '@mui/icons-material';
 
 export interface Action {
@@ -11,17 +11,20 @@ export interface Action {
 
 export interface PageHeaderProps {
     title: string;
-    onBack: () => void;
+    onBack?: () => void;
     actions?: Action[];
+    customContent?: ReactElement;
 }
 
-export default function PageHeader({ title, onBack, actions }: PageHeaderProps) {
+export function PageHeader({ title, onBack, actions, customContent }: PageHeaderProps) {
     return (
         <div className={styles['page-header-wrapper']}>
             <div className={styles['title-container']}>
-                <IconButton onClick={onBack}>
-                    <ArrowBack />
-                </IconButton>
+                {onBack && (
+                    <IconButton onClick={onBack}>
+                        <ArrowBack />
+                    </IconButton>
+                )}
                 <h1>{title}</h1>
             </div>
             <div className={styles['actions']}>
@@ -32,6 +35,7 @@ export default function PageHeader({ title, onBack, actions }: PageHeaderProps) 
                         </IconButton>
                     ))}
             </div>
+            <div className={styles['custom-content']}>{customContent}</div>
         </div>
     );
 }

@@ -23,7 +23,7 @@
 
   @media (max-width: 540px) {
     main {
-      padding: 3rem;
+      padding: var(--spacing-xl);
     }
   }
 }

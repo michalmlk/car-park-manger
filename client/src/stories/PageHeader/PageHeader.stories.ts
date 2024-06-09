@@ -1,4 +1,4 @@
-import PageHeader from './PageHeader';
+import { PageHeader } from './PageHeader';
 import { fn } from '@storybook/test';
 import { Meta, StoryObj } from '@storybook/react';
 
@@ -12,6 +12,7 @@ const meta = {
     argTypes: {
         title: { control: 'text' },
         onBack: { action: 'clicked' },
+        customContent: { control: 'text' },
     },
     args: { onBack: fn() },
 } satisfies Meta<typeof PageHeader>;
@@ -22,7 +23,6 @@ type Story = StoryObj<typeof meta>;
 
 export const Header: Story = {
     args: {
-        onBack: () => console.log('back!'),
         title: 'Example page header',
     },
 };

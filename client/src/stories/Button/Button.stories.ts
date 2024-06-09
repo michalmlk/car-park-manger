@@ -15,6 +15,7 @@ const meta = {
     // More on argTypes: https://storybook.js.org/docs/api/argtypes
     argTypes: {
         backgroundColor: { control: 'color' },
+        type: { control: 'select', options: ['submit', 'button'] },
     },
     // Use `fn` to spy on the onClick arg, which will appear in the actions panel once invoked: https://storybook.js.org/docs/essentials/actions#action-args
     args: { onClick: fn() },
@@ -28,12 +29,14 @@ export const Primary: Story = {
     args: {
         primary: false,
         children: 'Button',
+        type: 'button',
     },
 };
 
 export const Secondary: Story = {
     args: {
         children: 'Button',
+        type: 'button',
     },
 };
 
@@ -41,6 +44,7 @@ export const Large: Story = {
     args: {
         size: 'large',
         children: 'Button',
+        type: 'button',
     },
 };
 
@@ -48,12 +52,14 @@ export const Small: Story = {
     args: {
         size: 'small',
         children: 'Button',
+        type: 'button',
     },
 };
 
 export const Warning: Story = {
     args: {
         primary: true,
+        type: 'button',
         backgroundColor: 'red',
         children: 'Delete now',
     },

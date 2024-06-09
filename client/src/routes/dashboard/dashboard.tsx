@@ -4,6 +4,7 @@ import { Button } from '../../stories/Button/Button.tsx';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { PageHeader } from '../../stories/PageHeader/PageHeader.tsx';
 
 interface Reservation {
     _id: string;
@@ -25,16 +26,18 @@ export default function DashboardPage() {
             );
             setReservations(useReservations);
         });
-    }, []);
+    }, [user]);
 
     return (
         <div className={styles['page-wrapper']}>
-            <div className={styles['page-header']}>
-                {user && <h1 className={styles['header']}>Welcome back, {user.firstName} ⚡️</h1>}
-                <Button size="medium">
-                    <Link to="/dashboard/create">Create reservation</Link>
-                </Button>
-            </div>
+            <PageHeader
+                title={`Welcome back${user ? `, ${user.firstName}` : ''} ⚡️`}
+                customContent={
+                    <Button size="medium">
+                        <Link to="/dashboard/create">Create reservation</Link>
+                    </Button>
+                }
+            />
             <div className={styles['reservation-container']}>
                 {reservations.length ? (
                     reservations.map((reservation) => (
