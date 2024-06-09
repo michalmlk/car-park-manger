@@ -18,6 +18,15 @@ placesRouter.get("/get/:place", async (req, res) => {
   }
 });
 
+placesRouter.get("/getById/:id", async (req, res) => {
+  try {
+    const place = await Place.findById(req.params.id);
+    res.status(200).json(place);
+  } catch (e: unknown) {
+    res.status(401).json({ error: "No place found" });
+  }
+});
+
 placesRouter.put("/update/:id", async (req, res) => {
   try {
     const placeId = req.params.id;

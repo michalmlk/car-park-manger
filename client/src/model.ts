@@ -4,3 +4,13 @@ export interface PlaceDTO {
     floor: number;
     reservedOn: string[];
 }
+
+export type Day = 'MON' | 'TUE' | 'WED' | 'THU' | 'FRI';
+
+export interface Reservation {
+    _id: string;
+    floor: number;
+    day: Day;
+    userId: string;
+    place: string;
+}

@@ -13,6 +13,19 @@ reservationsRouter.get("/getAll", async (req, res) => {
   }
 });
 
+reservationsRouter.get("/getAll/:userId", async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const reservationsList = await Reservation.find({
+      userId: { $eq: userId },
+    });
+    res.status(200).json(reservationsList);
+  } catch (e) {
+    res.status(401).json({ error: "No reservations found" });
+    console.log(e);
+  }
+});
+
 reservationsRouter.post("/create", async (req, res) => {
   try {
     const newReservation = new Reservation(req.body);

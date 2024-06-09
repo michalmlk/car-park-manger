@@ -44,8 +44,6 @@ export default function ReservationForm({ userId }: ReservationFormProps) {
         }));
     };
 
-    const handleReset = () => setFormData(initialFormState);
-
     const { day, place, floor } = formData;
 
     useEffect(() => {

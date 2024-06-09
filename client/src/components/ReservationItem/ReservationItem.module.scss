@@ -1,0 +1,29 @@
+.reservation-wrapper {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  padding: 1rem;
+  min-width: 200px;
+  height: 240px;
+
+  border: 1px solid #ddd;
+
+  .place-number {
+    font-size: var(--font-size-xxl);
+    font-weight: bold;
+    color: var(--color-primary);
+  }
+
+  .place-floor {
+    font-size: var(--font-size-m);
+
+    span {
+      color: var(--color-accent);
+      font-weight: bold;
+    }
+  }
+
+  .reservation-day {
+    font-size: var(--font-size-m);
+  }
+}

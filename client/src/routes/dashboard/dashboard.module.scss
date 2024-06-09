@@ -1,6 +1,7 @@
 .page-wrapper {
   display: flex;
   flex-direction: column;
+  gap: 2rem;
 
   .page-header {
     display: flex;
@@ -20,14 +21,20 @@
     color: var(--color-font);
   }
 
-  .reservation-container {
-    margin: var(--spacing-xl) 0;
-  }
+  .reservations-container {
+    display: flex;
+    flex-direction: column;
 
-  .reservation-list {
     .info-header {
       color: var(--color-primary);
       font-weight: var(--font-weight-normal);
+    }
+
+    .reservations-list {
+      margin: var(--spacing-xl) 0;
+      display: flex;
+      gap: var(--spacing-l);
+      overflow-x: scroll;
     }
   }
 }
