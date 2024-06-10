@@ -8,6 +8,7 @@ import { PageHeader } from '../../stories/PageHeader/PageHeader.tsx';
 import ReservationItem from '../../components/ReservationItem/ReservationItem.tsx';
 import type { Reservation } from '../../model.ts';
 import { Infobox } from '../../stories/Infobox/Infobox.tsx';
+import { AddOutlined } from '@mui/icons-material';
 
 export default function DashboardPage() {
     const { user } = useUser();
@@ -24,7 +25,7 @@ export default function DashboardPage() {
             <PageHeader
                 title={`Welcome back${user ? `, ${user.firstName}` : ''} ⚡️`}
                 customContent={
-                    <Button size="medium">
+                    <Button size="medium" isLink icon={<AddOutlined />}>
                         <Link to="/dashboard/create">Create</Link>
                     </Button>
                 }

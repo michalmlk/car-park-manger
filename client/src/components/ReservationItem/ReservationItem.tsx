@@ -3,6 +3,8 @@ import styles from './ReservationItem.module.scss';
 import { Reservation } from '../../routes/dashboard/dashboard.tsx';
 import axios from 'axios';
 import type { Day, PlaceDTO } from '../../model.ts';
+import { IconButton } from '@mui/material';
+import { Deblur, DeleteOutline, EditOutlined } from '@mui/icons-material';
 
 interface ReservationItemProps {
     reservation: Reservation;
@@ -51,7 +53,17 @@ const ReservationItem: React.FC<ReservationItemProps> = ({ reservation }) => {
             <div className={styles['place-floor']}>
                 Floor <span>{place?.floor}</span>
             </div>
-            <div className={styles['reservation-day']}>{getFullDay(day)}</div>
+            <div className={styles['reservation-actions']}>
+                <div className={styles['reservation-day']}>{getFullDay(day)}</div>
+                <div className={styles['reservation-buttons']}>
+                    <IconButton>
+                        <EditOutlined />
+                    </IconButton>
+                    <IconButton>
+                        <DeleteOutline />
+                    </IconButton>
+                </div>
+            </div>
         </div>
     );
 };

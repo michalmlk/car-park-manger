@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 
 const placesRouter = Router();
 
-placesRouter.get("/get/:place", async (req, res) => {
+placesRouter.get("/get/:place/:day", async (req, res) => {
   try {
     const place = await Place.find({
       number: { $eq: req.params.place },
@@ -50,24 +50,13 @@ placesRouter.put("/update/:id", async (req, res) => {
   }
 });
 
-placesRouter.get("/availablePlaces", async (req, res) => {
-  try {
-    const availablePlaces = await Place.find({
-      $expr: {
-        $lt: [{ $size: "$reservedOn" }, 5],
-      },
-    });
-    res.status(200).json(availablePlaces);
-  } catch (err) {
-    res.status(401).json({ error: "Failed to get available places" });
-  }
-});
-
-placesRouter.get("/availablePlaces/:floor", async (req, res) => {
+placesRouter.get("/availablePlaces/:floor/:day", async (req, res) => {
   const floor = req.params.floor;
+  const day = req.params.day;
   try {
     const availablePlacesForSelectedFloor = await Place.find({
       floor: { $eq: floor },
+      reservedOn: { $not: { $in: [day] } },
     });
     res.status(200).json(availablePlacesForSelectedFloor);
   } catch (err) {

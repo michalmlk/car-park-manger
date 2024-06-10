@@ -3,9 +3,12 @@
   font-weight: normal;
   border: 0;
   cursor: pointer;
-  display: inline-block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 40px;
   transition: background-color .2s ease;
-
+  font-size: var(--font-size-l);
 
   &.primary {
     color: white;
@@ -36,18 +39,22 @@
     }
   }
 
+  &.has-icon {
+    justify-content: space-between;
+  }
+
   &.small {
-    font-size: var(--button-font-size-small);
+    font-size: var(--font-size-s);
     padding: var(--spacing-xs) var(--spacing-s);
   }
 
   &.medium {
-    font-size: var(--button-font-size-medium);
+    font-size: var(--font-size-s);
     padding: var(--spacing-xs) var(--spacing-m);
   }
 
   &.large {
-    font-size: var(--button-font-size-large);
+    font-size: var(--font-size-m);
     padding: var(--spacing-s) var(--spacing-l);
   }
 }

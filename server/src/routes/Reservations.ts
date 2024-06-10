@@ -1,5 +1,6 @@
 import { Router } from "express";
 import Reservation from "../config/model/Reservation";
+import Place from "../config/model/Place";
 
 const reservationsRouter = Router();
 
@@ -29,6 +30,12 @@ reservationsRouter.get("/getAll/:userId", async (req, res) => {
 reservationsRouter.post("/create", async (req, res) => {
   try {
     const newReservation = new Reservation(req.body);
+    const place = await Place.find({
+      number: { $eq: req.body.number },
+    });
+    if (place.length && place[0].reservedOn.includes(req.body.day)) {
+      res.status(401).json({ error: "Place is already reserved" });
+    }
     await newReservation.save();
     res.status(201).send(newReservation);
   } catch (e) {

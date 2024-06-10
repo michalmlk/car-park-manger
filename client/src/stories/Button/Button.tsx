@@ -1,5 +1,6 @@
-import React, { PropsWithChildren } from 'react';
+import React, { PropsWithChildren, ReactElement } from 'react';
 import './button.scss';
+import { Icon, IconTypeMap } from '@mui/material';
 
 type ButtonType = 'button' | 'submit';
 
@@ -8,9 +9,12 @@ interface ButtonProps {
     backgroundColor?: string;
     size?: 'small' | 'medium' | 'large';
     onClick?: () => void;
-    children?: React.ReactNode;
     type?: ButtonType;
     className?: string;
+    children?: ReactElement;
+    label?: string;
+    icon?: ReactElement;
+    isLink?: boolean;
 }
 
 export const Button: React.FC<PropsWithChildren<ButtonProps>> = ({
@@ -20,19 +24,22 @@ export const Button: React.FC<PropsWithChildren<ButtonProps>> = ({
     className,
     backgroundColor,
     onClick,
-    children,
+    label,
+    icon,
+    isLink,
     ...props
 }: ButtonProps) => {
     const mode = primary ? 'primary' : 'secondary';
     return (
         <button
             type={type}
-            className={['shared-button', size, className, mode].join(' ')}
+            className={['shared-button', size, className, mode, icon && 'has-icon'].join(' ')}
             style={{ backgroundColor }}
             {...props}
             onClick={onClick}
         >
-            {children}
+            {!isLink ? label : props.children}
+            {icon}
         </button>
     );
 };

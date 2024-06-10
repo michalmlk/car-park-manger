@@ -3,10 +3,25 @@
   justify-content: space-between;
   flex-direction: column;
   padding: 1rem;
-  min-width: 200px;
-  height: 240px;
+  height: 200px;
 
   border: 1px solid #ddd;
+
+  .reservation-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--spacing-s);
+    align-items: center;
+
+    .reservation-day {
+      font-size: var(--font-size-m);
+    }
+
+    .reservation-buttons {
+      display: flex;
+    }
+
+  }
 
   .place-number {
     font-size: var(--font-size-xxl);
@@ -15,15 +30,12 @@
   }
 
   .place-floor {
-    font-size: var(--font-size-m);
+    font-size: var(--font-size-s);
 
     span {
       color: var(--color-accent);
       font-weight: bold;
+      font-size: var(--font-size-m);
     }
-  }
-
-  .reservation-day {
-    font-size: var(--font-size-m);
   }
 }

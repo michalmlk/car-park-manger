@@ -7,6 +7,7 @@ import { Button } from '../../stories/Button/Button';
 import { PlaceDTO } from '../../model.ts';
 import { FLOOR_OPTIONS, DAY_OPTIONS } from '../../config.ts';
 import { useNavigate } from 'react-router-dom';
+import { AddOutlined } from '@mui/icons-material';
 
 interface ReservationFormProps {
     userId: string;
@@ -54,7 +55,7 @@ export default function ReservationForm({ userId }: ReservationFormProps) {
         e.preventDefault();
         try {
             const { data } = await axios.get<PlaceDTO>(
-                `http://localhost:3000/api/places/get/${place}`
+                `http://localhost:3000/api/places/get/${place}/${day}`
             );
             if (data) {
                 await axios.post(`http://localhost:3000/api/reservations/create`, {
@@ -63,11 +64,9 @@ export default function ReservationForm({ userId }: ReservationFormProps) {
                     userId,
                     place: data._id,
                 });
-
-                if (day && !data.reservedOn.includes(day))
-                    await axios.put(`http://localhost:3000/api/places/update/${data._id}`, {
-                        reservedOn: [...data.reservedOn, day],
-                    });
+                await axios.put(`http://localhost:3000/api/places/update/${data._id}`, {
+                    reservedOn: [...data.reservedOn, day],
+                });
             }
             navigate('/dashboard');
         } catch (e) {
@@ -80,8 +79,9 @@ export default function ReservationForm({ userId }: ReservationFormProps) {
     ): Promise<{ label: string | number; value: number }[]> => {
         try {
             const { data } = await axios.get<PlaceDTO[]>(
-                `http://localhost:3000/api/places/availablePlaces/${floor}`
+                `http://localhost:3000/api/places/availablePlaces/${floor}/${day}`
             );
+            console.log(data);
             return data.map((data) => ({
                 label: data.number,
                 value: data.number,
@@ -115,9 +115,13 @@ export default function ReservationForm({ userId }: ReservationFormProps) {
                 onChange={handleChange}
                 name="place"
             />
-            <Button type="submit" primary className={styles['reservation-form-button']}>
-                Submit
-            </Button>
+            <Button
+                type="submit"
+                primary
+                className={styles['reservation-form-button']}
+                label="Create"
+                icon={<AddOutlined />}
+            />
         </form>
     );
 }
