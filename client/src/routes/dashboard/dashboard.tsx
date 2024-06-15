@@ -8,7 +8,8 @@ import { PageHeader } from '../../stories/PageHeader/PageHeader.tsx';
 import ReservationItem from '../../components/ReservationItem/ReservationItem.tsx';
 import type { Reservation } from '../../model.ts';
 import { Infobox } from '../../stories/Infobox/Infobox.tsx';
-import { AddOutlined } from '@mui/icons-material';
+import { AddOutlined, EditOutlined } from '@mui/icons-material';
+import carImage from '../../../assets/car-photo.png';
 
 export default function DashboardPage() {
     const { user } = useUser();
@@ -22,17 +23,13 @@ export default function DashboardPage() {
 
     return (
         <div className={styles['page-wrapper']}>
-            <PageHeader
-                title={`Welcome back${user ? `, ${user.firstName}` : ''} ⚡️`}
-                customContent={
-                    <Button size="medium" isLink icon={<AddOutlined />}>
-                        <Link to="/dashboard/create">Create</Link>
-                    </Button>
-                }
-            />
+            <PageHeader title={`Welcome back${user ? `, ${user.firstName}` : ''} ⚡️`} />
             {reservations.length ? (
                 <div className={styles['reservations-container']}>
-                    <h2 className={styles['info-header']}>Your nearest reservations</h2>
+                    <div className={styles['reservations-container__header']}>
+                        <h2 className={styles['info-header']}>Your nearest reservations</h2>
+                        <Button size="medium" icon={<EditOutlined />} label="Manage" />
+                    </div>
                     <div className={styles['reservations-list']}>
                         {reservations.map((reservation) => (
                             <ReservationItem key={reservation._id} reservation={reservation} />
@@ -40,12 +37,22 @@ export default function DashboardPage() {
                     </div>
                 </div>
             ) : (
-                <Infobox
-                    title="You do not have any reservations"
-                    actionButtonLabel="Create new"
-                    onAction={() => navigate('/dashboard/create')}
-                ></Infobox>
+                <Infobox title="You do not have any reservations"></Infobox>
             )}
+            <div className={styles['dashboard-footer']}>
+                <Button
+                    size="large"
+                    isLink
+                    icon={<AddOutlined />}
+                    primary
+                    className={styles['root-footer-btn']}
+                >
+                    <Link to="/dashboard/create">Create reservation</Link>
+                </Button>
+            </div>
+            <div className={styles['background-image']}>
+                <img alt="car" src={carImage} />
+            </div>
         </div>
     );
 }

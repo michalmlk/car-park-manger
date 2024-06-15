@@ -1,24 +1,31 @@
 .root-content {
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - 60px);
+  height: 100%;
 
   .top-bar {
     display: flex;
-    width: 100%;
+    width: calc(100% - var(--spacing-xs) * 2);
+    height: 60px;
     justify-content: space-between;
     align-items: center;
-    padding: 0 var(--spacing-xl);
-    height: 60px;
-    color: #ffffff;
-    background-color: var(--color-primary);
+    padding: 0 var(--spacing-m);
+    color: var(--color-font);
+    background-color: var(--color-card);
     font-weight: var(--font-weight-normal);
     font-family: Roboto, sans-serif;
     font-size: var(--font-size-m);
+    margin: var(--spacing-xs);
+    border-radius: 8px;
   }
 
   main {
     padding: var(--main-section-padding);
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
   }
 
   @media (max-width: 540px) {

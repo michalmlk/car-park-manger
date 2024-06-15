@@ -4,11 +4,13 @@
   border: 0;
   cursor: pointer;
   display: flex;
+  gap: 0.25rem;
   justify-content: center;
   align-items: center;
   height: 40px;
   transition: background-color .2s ease;
   font-size: var(--font-size-l);
+  border-radius: 8px;
 
   &.primary {
     color: white;
@@ -45,17 +47,17 @@
 
   &.small {
     font-size: var(--font-size-s);
-    padding: var(--spacing-xs) var(--spacing-s);
+    padding: var(--spacing-xs) var(--spacing-xs);
   }
 
   &.medium {
     font-size: var(--font-size-s);
-    padding: var(--spacing-xs) var(--spacing-m);
+    padding: var(--spacing-xs) var(--spacing-xs);
   }
 
   &.large {
     font-size: var(--font-size-m);
-    padding: var(--spacing-s) var(--spacing-l);
+    padding: var(--spacing-l) var(--spacing-l);
   }
 }
 

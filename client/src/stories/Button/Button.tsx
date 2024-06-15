@@ -1,6 +1,5 @@
-import React, { PropsWithChildren, ReactElement } from 'react';
+import React, { PropsWithChildren, ReactElement, ReactNode } from 'react';
 import './button.scss';
-import { Icon, IconTypeMap } from '@mui/material';
 
 type ButtonType = 'button' | 'submit';
 
@@ -11,7 +10,7 @@ interface ButtonProps {
     onClick?: () => void;
     type?: ButtonType;
     className?: string;
-    children?: ReactElement;
+    children?: ReactElement | ReactNode;
     label?: string;
     icon?: ReactElement;
     isLink?: boolean;
@@ -26,7 +25,7 @@ export const Button: React.FC<PropsWithChildren<ButtonProps>> = ({
     onClick,
     label,
     icon,
-    isLink,
+    isLink = false,
     ...props
 }: ButtonProps) => {
     const mode = primary ? 'primary' : 'secondary';

@@ -1,12 +1,42 @@
 import * as mongoose from "mongoose";
 
-const schema = new mongoose.Schema({
-  floor: Number,
-  day: String,
-  userId: String,
+export interface ReservationDAO {
+  userId: string;
+  place: {
+    type: typeof mongoose.Schema.Types.ObjectId;
+    ref: string;
+    required: true;
+  };
+  date?: Date;
+  day?: string;
+  isSeriesReservation: boolean;
+}
+
+const schema = new mongoose.Schema<ReservationDAO>({
+  userId: {
+    type: String,
+    required: true,
+  },
   place: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Place",
+    required: true,
+  },
+  date: {
+    type: Date,
+    required: function () {
+      return !this.isSeriesReservation;
+    },
+  },
+  day: {
+    type: String,
+    required: function () {
+      return this.isSeriesReservation;
+    },
+  },
+  isSeriesReservation: {
+    type: Boolean,
+    default: false,
   },
 });
 

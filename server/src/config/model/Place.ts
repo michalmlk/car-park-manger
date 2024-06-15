@@ -1,9 +1,17 @@
 import mongoose, { Schema } from "mongoose";
 
-const schema = new Schema({
+export interface PlaceDAO {
+  number: number;
+  floor: number;
+  reservedOn: string[];
+  isSeriesReserved: boolean;
+}
+
+const schema = new Schema<PlaceDAO>({
   number: Number,
   floor: Number,
-  reservedOn: [String],
+  reservedOn: [Date],
+  isSeriesReserved: Boolean,
 });
 
 const Place = mongoose.model("Place", schema);

@@ -8,6 +8,10 @@ import { PlaceDTO } from '../../model.ts';
 import { FLOOR_OPTIONS, DAY_OPTIONS } from '../../config.ts';
 import { useNavigate } from 'react-router-dom';
 import { AddOutlined } from '@mui/icons-material';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { Dayjs } from 'dayjs';
 
 interface ReservationFormProps {
     userId: string;
@@ -21,7 +25,7 @@ interface ReservationFormState {
 
 interface SelectOption {
     label: string;
-    value: string | number;
+    value: string | number | undefined;
 }
 
 const initialFormState = {
@@ -74,54 +78,67 @@ export default function ReservationForm({ userId }: ReservationFormProps) {
         }
     };
 
-    const fetchPlaces = async (
-        inputValue = ''
-    ): Promise<{ label: string | number; value: number }[]> => {
-        try {
-            const { data } = await axios.get<PlaceDTO[]>(
-                `http://localhost:3000/api/places/availablePlaces/${floor}/${day}`
-            );
-            console.log(data);
-            return data.map((data) => ({
-                label: data.number,
-                value: data.number,
-            }));
-        } catch (e) {
-            console.error(`Error while fetching places ${e}`);
-            return [];
-        }
+    const mapTemplateResponseToSelectOptions = (response: PlaceDTO[]): SelectOption[] => {
+        return response.map((r) => ({
+            label: `${r.number}`,
+            value: r.number,
+        }));
     };
 
+    const fetchPlaces = async (inputValue = ''): Promise<SelectOption[]> => {
+        return axios
+            .get<PlaceDTO[]>(`http://localhost:3000/api/places/availablePlaces/${floor}/${day}`)
+            .then(({ data }) => [
+                {
+                    label: 'Please select place',
+                    value: undefined,
+                },
+                ...mapTemplateResponseToSelectOptions(data),
+            ])
+            .then((data) =>
+                data.filter((opt) => opt.label.toLowerCase().includes(inputValue.toLowerCase()))
+            );
+    };
+
+    const [dateValue, setDateValue] = useState<Dayjs | null>();
+
     return (
-        <form onSubmit={handleCreateReservation} className={styles['reservation-form']}>
-            <Select
-                placeholder="Select day"
-                name="day"
-                onChange={handleChange}
-                options={DAY_OPTIONS}
-            />
-            <Select
-                placeholder="Select floor"
-                onChange={handleChange}
-                options={FLOOR_OPTIONS}
-                isDisabled={!day}
-                name="floor"
-            />
-            <AsyncSelect
-                placeholder="Select place"
-                isDisabled={!isPlaceSelectionAvailable}
-                defaultOptions
-                loadOptions={fetchPlaces}
-                onChange={handleChange}
-                name="place"
-            />
-            <Button
-                type="submit"
-                primary
-                className={styles['reservation-form-button']}
-                label="Create"
-                icon={<AddOutlined />}
-            />
-        </form>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <form onSubmit={handleCreateReservation} className={styles['reservation-form']}>
+                <Select
+                    placeholder="Select day"
+                    name="day"
+                    onChange={handleChange}
+                    options={DAY_OPTIONS}
+                />
+                <DatePicker
+                    label="Select date"
+                    value={dateValue}
+                    onChange={(newVal) => setDateValue(newVal)}
+                />
+                <Select
+                    placeholder="Select floor"
+                    onChange={handleChange}
+                    options={FLOOR_OPTIONS}
+                    isDisabled={!day}
+                    name="floor"
+                />
+                <AsyncSelect
+                    placeholder="Select place"
+                    isDisabled={!isPlaceSelectionAvailable}
+                    defaultOptions
+                    loadOptions={fetchPlaces}
+                    onChange={handleChange}
+                    name="place"
+                />
+                <Button
+                    type="submit"
+                    primary
+                    className={styles['reservation-form-button']}
+                    label="Create"
+                    icon={<AddOutlined />}
+                />
+            </form>
+        </LocalizationProvider>
     );
 }

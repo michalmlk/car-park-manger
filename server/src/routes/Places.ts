@@ -1,6 +1,7 @@
 import { Router } from "express";
 import Place from "../config/model/Place";
 import mongoose from "mongoose";
+import { DEMO_PLACES } from "../data/demo-places";
 
 const placesRouter = Router();
 
@@ -74,6 +75,13 @@ placesRouter.post("/create", async (req, res) => {
   }
 });
 
-placesRouter.post("/loadPlaces");
+placesRouter.post("/demodata", async (req, res) => {
+  try {
+    await Place.insertMany(DEMO_PLACES);
+    res.status(200).json("DEMO PLACES added successfully");
+  } catch (err) {
+    res.status(400).json({ error: "Failed to load demo places" });
+  }
+});
 
 export default placesRouter;

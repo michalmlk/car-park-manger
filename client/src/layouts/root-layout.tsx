@@ -22,7 +22,7 @@ export default function RootLayout() {
             <UserContextProvider>
                 <div className={styles['root-content']}>
                     <header className={styles['top-bar']}>
-                        <p>Car park</p>
+                        <p>Car Park</p>
                         <div>
                             <SignedIn>
                                 <UserButton afterSignOutUrl="/sign-in" />
