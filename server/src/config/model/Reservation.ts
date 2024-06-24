@@ -2,14 +2,14 @@ import * as mongoose from "mongoose";
 
 export interface ReservationDAO {
   userId: string;
-  place: {
+  parkingSpot: {
     type: typeof mongoose.Schema.Types.ObjectId;
     ref: string;
     required: true;
   };
-  date?: Date;
-  day?: string;
-  isSeriesReservation: boolean;
+  startTime: Date;
+  endTime: Date;
+  status: "active" | "completed" | "cancelled";
 }
 
 const schema = new mongoose.Schema<ReservationDAO>({
@@ -17,26 +17,22 @@ const schema = new mongoose.Schema<ReservationDAO>({
     type: String,
     required: true,
   },
-  place: {
+  parkingSpot: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Place",
+    ref: "ParkingSpot",
     required: true,
   },
-  date: {
+  startTime: {
     type: Date,
-    required: function () {
-      return !this.isSeriesReservation;
-    },
+    required: true,
   },
-  day: {
+  endTime: {
+    type: Date,
+    required: true,
+  },
+  status: {
     type: String,
-    required: function () {
-      return this.isSeriesReservation;
-    },
-  },
-  isSeriesReservation: {
-    type: Boolean,
-    default: false,
+    required: true,
   },
 });
 

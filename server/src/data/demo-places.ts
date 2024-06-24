@@ -1,64 +1,28 @@
-import { PlaceDAO } from "../config/model/Place";
+import { ParkingSpotDAO } from "../config/model/ParkingSpot";
 
-export const DEMO_PLACES: PlaceDAO[] = [
+export const DEMO_PLACES: ParkingSpotDAO[] = [
   {
-    number: 73,
-    floor: -2,
-    isSeriesReserved: false,
-    reservedOn: [],
+    number: 70,
+    level: -2,
+    status: "free",
+    lastReservation: undefined,
   },
   {
-    number: 74,
-    floor: -2,
-    isSeriesReserved: false,
-    reservedOn: [],
+    number: 71,
+    level: -2,
+    status: "free",
+    lastReservation: undefined,
   },
   {
-    number: 75,
-    floor: -2,
-    isSeriesReserved: false,
-    reservedOn: [],
+    number: 100,
+    level: -3,
+    status: "free",
+    lastReservation: undefined,
   },
   {
-    number: 76,
-    floor: -2,
-    isSeriesReserved: false,
-    reservedOn: [],
-  },
-  {
-    number: 77,
-    floor: -2,
-    isSeriesReserved: false,
-    reservedOn: [],
-  },
-  {
-    number: 78,
-    floor: -2,
-    isSeriesReserved: false,
-    reservedOn: [],
-  },
-  {
-    number: 102,
-    floor: -3,
-    isSeriesReserved: false,
-    reservedOn: [],
-  },
-  {
-    number: 103,
-    floor: -3,
-    isSeriesReserved: false,
-    reservedOn: [],
-  },
-  {
-    number: 104,
-    floor: -3,
-    isSeriesReserved: false,
-    reservedOn: [],
-  },
-  {
-    number: 105,
-    floor: -3,
-    isSeriesReserved: false,
-    reservedOn: [],
+    number: 101,
+    level: -3,
+    status: "free",
+    lastReservation: undefined,
   },
 ];

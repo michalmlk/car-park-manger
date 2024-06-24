@@ -3,7 +3,7 @@ import { config } from "dotenv";
 import cors from "cors";
 
 import reservationsRouter from "./routes/Reservations";
-import placesRouter from "./routes/Places";
+import parkingSpotsRouter from "./routes/ParkingSpots";
 import mongoose from "mongoose";
 
 config();
@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(cors());
 
 app.use("/api/reservations", reservationsRouter);
-app.use("/api/places", placesRouter);
+app.use("/api/parkingSpots", parkingSpotsRouter);
 
 app.listen(process.env.PORT, () => {
   mongoose
