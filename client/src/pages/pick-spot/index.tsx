@@ -1,38 +1,19 @@
 import { FC, useEffect, useState } from 'react';
-import axios, { AxiosError, isAxiosError } from 'axios';
 import SpotItem from '../../components/spot-item/SpotItem.tsx';
 import { PageContent, PageFooter, PageSubtitle, PageTitle, PageWrapper, SpotsWrapper } from './pick-spot.styles.tsx';
 import { Button } from '../../stories/components/button/Button.tsx';
 import styles from '../dashboard/dashboard.module.scss';
-
-const fetchParkingSpots = async (): Promise<ParkingSpotDTO[] | undefined> => {
-  try {
-    const { data } = await axios.get('http://localhost:3000/api/parkingSpots/availableSpots');
-    if (data) {
-      return data;
-    }
-  } catch (e: unknown) {
-    if (isAxiosError(e)) {
-      console.log(`Failed to fetch spots, ${e.message}`);
-      throw new AxiosError(e.message);
-    } else if (e instanceof Error) {
-      throw new Error(e.message);
-    } else {
-      throw e;
-    }
-  }
-};
-
-interface ParkingSpotDTO {
-  _id: string;
-  number: number;
-  level: number;
-  status: 'free' | 'reserved';
-  lastReservation: string | undefined;
-}
+import { useUser } from '@clerk/clerk-react';
+import { Spinner } from '../../stories/components/loaders/Loaders.tsx';
+import { fetchParkingSpots } from '../../api/parkingSpotsApi.ts';
+import { handleReserveSpot } from '../../api/reservationsApi.ts';
+import { ParkingSpotDTO } from '../../model/ParkingSpotModel.ts';
 
 const PickSpotView: FC = () => {
   const [freeSpots, setFreeSpots] = useState<ParkingSpotDTO[]>([]);
+  const [pickedSpot, pickSpot] = useState<string | undefined>(undefined);
+  const { user } = useUser();
+
   useEffect(() => {
     fetchParkingSpots().then((data) => {
       if (data) {
@@ -40,8 +21,6 @@ const PickSpotView: FC = () => {
       }
     });
   }, []);
-  const [pickedSpot, pickSpot] = useState<string | undefined>(undefined);
-  console.log(pickedSpot);
 
   const handlePickSpot = (id: string) => {
     if (pickedSpot === id) {
@@ -51,13 +30,19 @@ const PickSpotView: FC = () => {
     }
   };
 
+  const handleCreateReservation = async (): Promise<void> => {
+    if (pickedSpot && user) {
+      await handleReserveSpot(pickedSpot, user.id);
+    }
+  };
+
   return (
     <PageWrapper>
       <PageTitle>Pick Place</PageTitle>
       <PageSubtitle>Available places</PageSubtitle>
       <PageContent>
         <SpotsWrapper>
-          {freeSpots &&
+          {freeSpots.length ? (
             freeSpots.map((spot, idx) => (
               <SpotItem
                 onClick={() => handlePickSpot(spot._id)}
@@ -65,7 +50,10 @@ const PickSpotView: FC = () => {
                 spot={spot}
                 selected={pickedSpot === spot._id}
               />
-            ))}
+            ))
+          ) : (
+            <Spinner label="Fetching places..." />
+          )}
         </SpotsWrapper>
       </PageContent>
       <PageFooter>
@@ -74,7 +62,8 @@ const PickSpotView: FC = () => {
           primary
           size="large"
           label="Create"
-          onClick={() => alert('ok')}
+          onClick={handleCreateReservation}
+          disabled={!pickedSpot}
         />
       </PageFooter>
     </PageWrapper>

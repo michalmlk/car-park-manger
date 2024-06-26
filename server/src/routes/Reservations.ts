@@ -14,19 +14,30 @@ reservationsRouter.get("/getAll", async (req, res) => {
 });
 
 reservationsRouter.post("/create", async (req, res) => {
-  // try {
-  //   const newReservation = new Reservation(req.body);
-  //   const place = await ParkingSpot.find({
-  //     number: { $eq: req.body.number },
-  //   });
-  //   if (place.length && place[0].reservedOn.includes(req.body.day)) {
-  //     res.status(401).json({ error: "Place is already reserved" });
-  //   }
-  //   await newReservation.save();
-  //   res.status(201).send(newReservation);
-  // } catch (e) {
-  //   res.status(401).json({ error: "Reservation creation failed" });
-  // }
+  try {
+    const newReservation = new Reservation(req.body);
+    await newReservation.save();
+    res.status(200).json(newReservation);
+  } catch (e) {
+    console.log(e);
+    res.status(401).json({ error: "Failed to create reservation" });
+  }
+});
+
+reservationsRouter.get("/get/:userId", async (req, res) => {
+  const { userId } = req.params;
+  if (userId) {
+    try {
+      const reservation = await Reservation.find({
+        userId: {
+          $eq: userId,
+        },
+      });
+      res.status(200).json(reservation[0]);
+    } catch (e) {
+      res.status(401).json({ error: "Failed to get reservation" });
+    }
+  }
 });
 
 export default reservationsRouter;

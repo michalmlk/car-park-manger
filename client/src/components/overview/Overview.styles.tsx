@@ -1,6 +1,10 @@
 import styled from 'styled-components';
 
 export const StyledOverviewWrapper = styled.div`
-  display: grid;
-  grid-template-columns: 1fr;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 540px;
+  justify-self: center;
 `;
