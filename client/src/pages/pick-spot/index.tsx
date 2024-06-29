@@ -8,6 +8,10 @@ import { Spinner } from '../../stories/components/loaders/Loaders.tsx';
 import { fetchParkingSpots } from '../../api/parkingSpotsApi.ts';
 import { handleReserveSpot } from '../../api/reservationsApi.ts';
 import { ParkingSpotDTO } from '../../model/ParkingSpotModel.ts';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs, { Dayjs } from 'dayjs';
+import { DateInputsArea, DateSelectorWrapper, StyledDatePicker } from './components/DateSelectorWrapper.styles.tsx';
 
 const PickSpotView: FC = () => {
   const [freeSpots, setFreeSpots] = useState<ParkingSpotDTO[]>([]);
@@ -31,10 +35,12 @@ const PickSpotView: FC = () => {
   };
 
   const handleCreateReservation = async (): Promise<void> => {
-    if (pickedSpot && user) {
-      await handleReserveSpot(pickedSpot, user.id);
+    if (pickedSpot && user && startDate) {
+      await handleReserveSpot(pickedSpot, user.id, startDate);
     }
   };
+
+  const [startDate, setStartDate] = useState<Dayjs | null>(dayjs());
 
   return (
     <PageWrapper>
@@ -55,6 +61,33 @@ const PickSpotView: FC = () => {
             <Spinner label="Fetching places..." />
           )}
         </SpotsWrapper>
+
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DateSelectorWrapper isVisible={!!pickedSpot}>
+            <h2>Pick date</h2>
+            <DateInputsArea>
+              {/*<StyledDateTimePicker*/}
+              {/*  label="From"*/}
+              {/*  defaultValue={dayjs(new Date())}*/}
+              {/*  value={startDate}*/}
+              {/*  onChange={(newVal) => setStartDate(newVal)}*/}
+              {/*/>*/}
+              <StyledDatePicker
+                label="Date"
+                defaultValue={dayjs(new Date())}
+                value={startDate}
+                onChange={(newVal) => newVal && setStartDate(newVal)}
+              />
+              {/*will be implemented in next iteration*/}
+              {/*<StyledDateTimePicker*/}
+              {/*  label="To"*/}
+              {/*  defaultValue={dayjs(new Date())}*/}
+              {/*  value={endDate}*/}
+              {/*  onChange={(newVal) => setEndDate(newVal)}*/}
+              {/*/>*/}
+            </DateInputsArea>
+          </DateSelectorWrapper>
+        </LocalizationProvider>
       </PageContent>
       <PageFooter>
         <Button
@@ -63,7 +96,7 @@ const PickSpotView: FC = () => {
           size="large"
           label="Create"
           onClick={handleCreateReservation}
-          disabled={!pickedSpot}
+          disabled={!pickedSpot || !startDate}
         />
       </PageFooter>
     </PageWrapper>

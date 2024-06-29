@@ -11,6 +11,7 @@ export const SpotsWrapper = styled.div`
 
 export const PageWrapper = styled.div`
   display: grid;
+  position: relative;
   grid-template-areas:
     'title'
     'subtitle'
