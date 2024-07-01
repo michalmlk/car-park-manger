@@ -36,7 +36,7 @@ const PickSpotView: FC = () => {
 
   const handleCreateReservation = async (): Promise<void> => {
     if (pickedSpot && user && startDate) {
-      await handleReserveSpot(pickedSpot, user.id, startDate);
+      await handleReserveSpot(pickedSpot, user.id, startDate.toDate());
     }
   };
 
@@ -66,25 +66,12 @@ const PickSpotView: FC = () => {
           <DateSelectorWrapper isVisible={!!pickedSpot}>
             <h2>Pick date</h2>
             <DateInputsArea>
-              {/*<StyledDateTimePicker*/}
-              {/*  label="From"*/}
-              {/*  defaultValue={dayjs(new Date())}*/}
-              {/*  value={startDate}*/}
-              {/*  onChange={(newVal) => setStartDate(newVal)}*/}
-              {/*/>*/}
               <StyledDatePicker
                 label="Date"
                 defaultValue={dayjs(new Date())}
                 value={startDate}
                 onChange={(newVal) => newVal && setStartDate(newVal)}
               />
-              {/*will be implemented in next iteration*/}
-              {/*<StyledDateTimePicker*/}
-              {/*  label="To"*/}
-              {/*  defaultValue={dayjs(new Date())}*/}
-              {/*  value={endDate}*/}
-              {/*  onChange={(newVal) => setEndDate(newVal)}*/}
-              {/*/>*/}
             </DateInputsArea>
           </DateSelectorWrapper>
         </LocalizationProvider>

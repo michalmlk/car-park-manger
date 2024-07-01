@@ -6,6 +6,7 @@ import { ClerkProvider } from '@clerk/clerk-react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Dashboard from './pages/dashboard';
 import PickSpotView from './pages/pick-spot';
+import ReservationsOverview from './pages/reservations-overview';
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
       {
         path: '/pick-spot',
         element: <PickSpotView />,
+      },
+      {
+        path: '/manage-reservations',
+        element: <ReservationsOverview />,
       },
     ],
   },

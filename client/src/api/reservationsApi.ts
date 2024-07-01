@@ -1,23 +1,15 @@
 import axios, { isAxiosError } from 'axios';
-import dayjs from 'dayjs';
+import { ReservationDTO } from '../model/ReservationModel.ts';
 
-export const handleReserveSpot = async (
-  parkingSpot: string,
-  userId: string,
-  startDate: dayjs.Dayjs | null,
-): Promise<void> => {
+export const handleReserveSpot = async (parkingSpot: string, userId: string, startDate: Date): Promise<void> => {
   if (parkingSpot && startDate) {
     try {
-      const { data: reservationData } = await axios.post('http://localhost:3000/api/reservations/create', {
+      await axios.post('http://localhost:3000/api/reservations/create', {
         userId,
         parkingSpot,
-        startTime: startDate.toISOString(),
-        endTime: startDate.toISOString(),
+        startTime: startDate,
+        endTime: startDate,
         status: 'active',
-      });
-      await axios.put(`http://localhost:3000/api/parkingSpots/pick/${parkingSpot}`, {
-        lastReservation: reservationData._id,
-        status: 'reserved',
       });
       console.log('Reservation created successfully');
     } catch (e: unknown) {
@@ -28,6 +20,21 @@ export const handleReserveSpot = async (
       } else {
         throw e;
       }
+    }
+  }
+};
+
+export const fetchReservation = async (userId: string, today: Date): Promise<ReservationDTO | undefined> => {
+  if (userId) {
+    try {
+      const { data } = await axios.get(`http://localhost:3000/api/reservations/get/${userId}/${today.toISOString()}`);
+      return data;
+    } catch (e: unknown) {
+      if (isAxiosError(e)) {
+        console.log(`Failed to fetch reservation data, ${e.message}`);
+      } else if (e instanceof Error) {
+        console.log(e.message);
+      } else throw e;
     }
   }
 };

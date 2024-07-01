@@ -6,6 +6,8 @@ export const fetchParkingSpots = async (): Promise<ParkingSpotDTO[] | undefined>
     const { data } = await axios.get('http://localhost:3000/api/parkingSpots/availableSpots');
     if (data) {
       return data;
+    } else {
+      return [];
     }
   } catch (e: unknown) {
     if (isAxiosError(e)) {
@@ -23,7 +25,6 @@ export const fetchParkingSpotById = async (id: string): Promise<ParkingSpotDTO |
   try {
     const { data } = await axios.get(`http://localhost:3000/api/parkingSpots/getSpot/${id}`);
     if (data) {
-      console.log(data);
       return data;
     }
   } catch (e: unknown) {
