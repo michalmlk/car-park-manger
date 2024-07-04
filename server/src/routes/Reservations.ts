@@ -33,7 +33,13 @@ reservationsRouter.post("/create", async (req, res) => {
         error: "You have already reserved another place at the same time.",
       });
     } else {
-      const newReservation = new Reservation(req.body);
+      const startTime = new Date(req.body.startTime);
+      startTime.setUTCHours(0, 0, 0, 0);
+      const newReservation = new Reservation({
+        ...req.body,
+        startTime,
+        status: "active",
+      });
       await newReservation.save({ session });
 
       await ParkingSpot.findByIdAndUpdate(
@@ -59,6 +65,26 @@ reservationsRouter.post("/create", async (req, res) => {
   }
 });
 
+reservationsRouter.get("/getAll/:userId", async (req, res) => {
+  const { userId } = req.params;
+  if (userId) {
+    try {
+      const reservations = await Reservation.find({
+        userId: {
+          $eq: userId,
+        },
+      });
+      if (reservations.length) {
+        res.status(200).json(reservations);
+      } else {
+        res.status(401).json(undefined);
+      }
+    } catch (e) {
+      res.status(401).json({ error: "Failed to get reservation" });
+    }
+  }
+});
+
 reservationsRouter.get("/get/:userId/:date", async (req, res) => {
   const { userId, date } = req.params;
   if (userId) {
@@ -81,6 +107,35 @@ reservationsRouter.get("/get/:userId/:date", async (req, res) => {
     } catch (e) {
       res.status(401).json({ error: "Failed to get reservation" });
     }
+  }
+});
+
+reservationsRouter.delete("/delete/:id/", async (req, res) => {
+  const { id } = req.params;
+  const session = await mongoose.startSession();
+  session.startTransaction();
+  try {
+    const reservation = await Reservation.findById(id);
+    if (reservation) {
+      await Reservation.deleteOne(
+        {
+          _id: id,
+        },
+        { session },
+      );
+      await ParkingSpot.findByIdAndUpdate(reservation.parkingSpot, {
+        status: "free",
+        lastReservation: reservation._id,
+      });
+    }
+    res.status(200).json("Reservation deleted");
+    console.log("Transaction commited");
+    await session.commitTransaction();
+  } catch (e) {
+    res.status(401).json({ error: "Failed to delete reservation" });
+    await session.abortTransaction();
+  } finally {
+    await session.endSession();
   }
 });
 

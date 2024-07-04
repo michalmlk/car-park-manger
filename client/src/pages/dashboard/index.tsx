@@ -1,5 +1,4 @@
 import { FC, useEffect, useState } from 'react';
-import { DashboardWrapper } from './dashboard.styles';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../../stories/components/button/Button.tsx';
 import styles from './dashboard.module.scss';
@@ -7,6 +6,9 @@ import Overview from '../../components/current-reservation/CurrentReservation.ts
 import { ReservationDTO } from '../../model/ReservationModel.ts';
 import { fetchReservation } from '../../api/reservationsApi.ts';
 import { useUser } from '@clerk/clerk-react';
+import { PageHeader } from '../../stories/components/page-header/PageHeader.tsx';
+import { PageWrapper } from '../../stories/components/page-wrapper/PageWrapper.tsx';
+import { Spinner } from '../../stories/components/loaders/Loaders.tsx';
 
 const Dashboard: FC = () => {
   const navigate = useNavigate();
@@ -14,11 +16,10 @@ const Dashboard: FC = () => {
   const handleNavigateManageReservationsView = (): void => navigate('/manage-reservations');
 
   const { user } = useUser();
-  const [overviewData, setOverviewData] = useState<ReservationDTO | undefined>();
-  const [isLoading, setIsLoading] = useState(false);
+  const [overviewData, setOverviewData] = useState<ReservationDTO | undefined>(undefined);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setIsLoading(true);
     if (user) {
       const today = new Date();
       fetchReservation(user.id, today).then((data) => {
@@ -30,11 +31,12 @@ const Dashboard: FC = () => {
         }
       });
     }
-  }, [user]);
+  }, [user, overviewData?.status]);
 
   return (
-    <DashboardWrapper>
-      <Overview overviewData={overviewData} isLoading={isLoading} />
+    <PageWrapper>
+      <PageHeader title={`Welcome back ${user?.fullName} ⚡`} />
+      {!isLoading ? <Overview overviewData={overviewData} isLoading={isLoading} /> : <Spinner />}
       <Button
         className={styles['reservation-button']}
         primary
@@ -42,7 +44,7 @@ const Dashboard: FC = () => {
         label={overviewData ? 'Manage reservations' : 'Create reservation'}
         onClick={overviewData ? handleNavigateManageReservationsView : handleNavigatePickSpotView}
       />
-    </DashboardWrapper>
+    </PageWrapper>
   );
 };
 

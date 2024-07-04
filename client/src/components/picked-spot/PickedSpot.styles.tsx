@@ -6,3 +6,10 @@ export const Details = styled.div`
   align-items: start;
   gap: 1rem;
 `;
+
+export const ActionsWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+`;

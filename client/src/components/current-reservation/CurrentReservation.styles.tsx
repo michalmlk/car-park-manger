@@ -7,4 +7,5 @@ export const CurrentReservationWrapper = styled.div`
   width: 100%;
   max-width: 540px;
   justify-self: center;
+  grid-area: content;
 `;
