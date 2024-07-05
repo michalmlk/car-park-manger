@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { CurrentReservationWrapper } from './CurrentReservation.styles.tsx';
+import { CurrentReservationWrapper, TextWrapper } from './CurrentReservation.styles.tsx';
 import { ReservationDTO } from '../../model/ReservationModel.ts';
 import PickedSpot from '../picked-spot/PickedSpot.tsx';
 
@@ -13,7 +13,10 @@ const CurrentReservation: FC<{ overviewData: ReservationDTO | undefined; isLoadi
           endTime={overviewData?.endTime}
         />
       ) : (
-        <h1>No reservation found</h1>
+        <TextWrapper>
+          <h1>No reservation found today</h1>
+          <p>Pick your first place</p>
+        </TextWrapper>
       )}
     </CurrentReservationWrapper>
   );

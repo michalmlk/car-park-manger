@@ -7,11 +7,12 @@ export const StyledPageWrapper = styled.div`
   grid-template-areas:
     'header'
     'content'
-    'bottombar';
-  grid-template-rows: 60px 1fr 100px;
+    'footer';
+  grid-template-rows: 60px 1fr 60px;
   width: 100%;
   flex-grow: 1;
-  padding: 2rem 4rem;
+  padding: 2rem 4rem 0;
+  align-items: center;
 
   @media (max-width: 540px) {
     padding: 1rem;

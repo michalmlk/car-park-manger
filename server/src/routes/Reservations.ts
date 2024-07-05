@@ -129,7 +129,7 @@ reservationsRouter.delete("/delete/:id/", async (req, res) => {
       });
     }
     res.status(200).json("Reservation deleted");
-    console.log("Transaction commited");
+    console.log("Transaction commited.");
     await session.commitTransaction();
   } catch (e) {
     res.status(401).json({ error: "Failed to delete reservation" });
