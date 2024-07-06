@@ -16,6 +16,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import { DateInputsArea, DateSelectorWrapper, StyledDatePicker } from './components/DateSelectorWrapper.styles.tsx';
 import { PageHeader } from '../../stories/components/page-header/PageHeader.tsx';
 import { useNavigate } from 'react-router-dom';
+import { useSnackbar } from '../../hooks/useSnackbar.tsx';
 
 const PickSpotView: FC = () => {
   const [freeSpots, setFreeSpots] = useState<ParkingSpotDTO[]>([]);
@@ -38,12 +39,24 @@ const PickSpotView: FC = () => {
     }
   };
 
+  const [isError, setIsError] = useState(false);
+
+  const { handleSnackbarInvoke, renderSnackbar } = useSnackbar({
+    successMessage: 'Reservation created successfully',
+    errorMessage: 'Failed to create reservation',
+    isError,
+  });
+
   const handleCreateReservation = async (): Promise<void> => {
     if (pickedSpot && user && startDate) {
       try {
         await handleReserveSpot(pickedSpot, user.id, startDate.toDate());
         setFreeSpots((prev) => prev.filter((spot) => spot._id !== pickedSpot));
+        pickSpot(undefined);
+        handleSnackbarInvoke();
       } catch (e) {
+        setIsError(true);
+        handleSnackbarInvoke();
         console.log(e);
       }
     }
@@ -55,6 +68,7 @@ const PickSpotView: FC = () => {
     <PageWrapper>
       <PageHeader title="Select place" />
       <PageContent>
+        {renderSnackbar}
         <SpotsWrapper>
           {freeSpots.length ? (
             freeSpots.map((spot, idx) => (

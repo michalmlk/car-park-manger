@@ -12,29 +12,45 @@ import { useUser } from '@clerk/clerk-react';
 import PickedSpot from '../../components/picked-spot/PickedSpot.tsx';
 import { PageContent } from '../../stories/components/page-content/PageContent.tsx';
 import { PageFooter } from '../../stories/components/page-footer/PageFooter.tsx';
+import { useSnackbar } from '../../hooks/useSnackbar.tsx';
 
 const ReservationsOverview: FC = () => {
   const navigate = useNavigate();
   const [reservations, setReservations] = useState<ReservationDTO[]>([]);
   const { user } = useUser();
+  const [isError, setIsError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const { handleSnackbarInvoke, renderSnackbar } = useSnackbar({
+    successMessage: 'Reservation deleted successfully',
+    errorMessage: 'Failed to delete reservation',
+    isError,
+  });
 
   const handleDeleteReservation = async (id: string): Promise<void> => {
+    setIsLoading(true);
     try {
       await deleteReservation(id);
       setReservations((prev) => prev.filter((reservation) => reservation._id !== id));
+      handleSnackbarInvoke();
+      setIsLoading(false);
     } catch (e) {
       console.log(e);
+      setIsError(true);
+      handleSnackbarInvoke();
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
     fetchUserReservations(user!.id).then((data) => data && setReservations(data));
-  }, [reservations.length, user]);
+  }, [navigate, reservations.length, user]);
 
   return (
     <PageWrapper>
       <PageHeader title="Your current reservations" />
       <PageContent>
+        {renderSnackbar}
         <SpotsWrapper>
           {reservations.length ? (
             reservations.map((reservation, idx) => (
@@ -52,8 +68,9 @@ const ReservationsOverview: FC = () => {
               />
             ))
           ) : (
-            <Spinner label="Fetching places..." />
+            <></>
           )}
+          {isLoading && <Spinner label="Fetching places..." />}
         </SpotsWrapper>
       </PageContent>
       <PageFooter leftArea={<Button label="Back" onClick={() => navigate('/dashboard')} />} />

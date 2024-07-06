@@ -15,6 +15,6 @@ export const StyledPageWrapper = styled.div`
   align-items: center;
 
   @media (max-width: 540px) {
-    padding: 1rem;
+    padding: 0 1rem;
   }
 `;

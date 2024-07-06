@@ -7,11 +7,14 @@ const CurrentReservation: FC<{ overviewData: ReservationDTO | undefined; isLoadi
   return (
     <CurrentReservationWrapper>
       {overviewData && Object.keys(overviewData).length ? (
-        <PickedSpot
-          parkingSpotId={overviewData?.parkingSpot}
-          startTime={overviewData?.startTime}
-          endTime={overviewData?.endTime}
-        />
+        <>
+          <h3>Your nearest reservation</h3>
+          <PickedSpot
+            parkingSpotId={overviewData?.parkingSpot}
+            startTime={overviewData?.startTime}
+            endTime={overviewData?.endTime}
+          />
+        </>
       ) : (
         <TextWrapper>
           <h1>No reservation found today</h1>
