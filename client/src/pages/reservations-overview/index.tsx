@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { Button } from '../../stories/components/button/Button.tsx';
 import { useNavigate } from 'react-router-dom';
 import { PageHeader } from '../../stories/components/page-header/PageHeader.tsx';
@@ -13,6 +13,8 @@ import PickedSpot from '../../components/picked-spot/PickedSpot.tsx';
 import { PageContent } from '../../stories/components/page-content/PageContent.tsx';
 import { PageFooter } from '../../stories/components/page-footer/PageFooter.tsx';
 import { useSnackbar } from '../../hooks/useSnackbar.tsx';
+import { useModal } from '../../hooks/useModal.tsx';
+import { Modal } from '../../stories/components/modal/Modal.tsx';
 
 const ReservationsOverview: FC = () => {
   const navigate = useNavigate();
@@ -20,6 +22,7 @@ const ReservationsOverview: FC = () => {
   const { user } = useUser();
   const [isError, setIsError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [reservation, setReservation] = useState<string>('');
 
   const { handleSnackbarInvoke, renderSnackbar } = useSnackbar({
     successMessage: 'Reservation deleted successfully',
@@ -27,20 +30,38 @@ const ReservationsOverview: FC = () => {
     isError,
   });
 
-  const handleDeleteReservation = async (id: string): Promise<void> => {
-    setIsLoading(true);
-    try {
-      await deleteReservation(id);
-      setReservations((prev) => prev.filter((reservation) => reservation._id !== id));
-      handleSnackbarInvoke();
-      setIsLoading(false);
-    } catch (e) {
-      console.log(e);
-      setIsError(true);
-      handleSnackbarInvoke();
-      setIsLoading(false);
-    }
-  };
+  const handleDeleteReservation = useCallback(
+    async (id: string): Promise<void> => {
+      setIsLoading(true);
+      try {
+        await deleteReservation(id);
+        setReservations((prev) => prev.filter((reservation) => reservation._id !== id));
+        handleSnackbarInvoke();
+        setIsLoading(false);
+      } catch (e) {
+        console.log(e);
+        setIsError(true);
+        handleSnackbarInvoke();
+        setIsLoading(false);
+      }
+    },
+    [handleSnackbarInvoke],
+  );
+
+  const { isOpen, toggleModal } = useModal();
+
+  const ConfirmationModal = useMemo(
+    () => (
+      <Modal
+        onClose={toggleModal}
+        onConfirm={() => handleDeleteReservation(reservation)}
+        onConfirmLabel="Delete"
+        onCancelLabel="Cancel"
+        title="Are you sure you want to delete reservation?"
+      />
+    ),
+    [handleDeleteReservation, reservation, toggleModal],
+  );
 
   useEffect(() => {
     fetchUserReservations(user!.id).then((data) => data && setReservations(data));
@@ -49,6 +70,7 @@ const ReservationsOverview: FC = () => {
   return (
     <PageWrapper>
       <PageHeader title="Your current reservations" />
+      {isOpen && ConfirmationModal}
       <PageContent>
         {renderSnackbar}
         <SpotsWrapper>
@@ -61,7 +83,10 @@ const ReservationsOverview: FC = () => {
                 endTime={reservation.endTime}
                 actions={[
                   {
-                    action: () => handleDeleteReservation(reservation._id),
+                    action: () => {
+                      setReservation(reservation._id);
+                      toggleModal();
+                    },
                     icon: <DeleteOutline />,
                   },
                 ]}
