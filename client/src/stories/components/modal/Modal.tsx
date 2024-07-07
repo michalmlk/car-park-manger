@@ -25,7 +25,7 @@ export const Modal: FC<PropsWithChildren<ModalProps>> = ({
         <ModalContent>{children}</ModalContent>
         <ModalFooter>
           <Button label={onCancelLabel} onClick={onClose} />
-          <Button label={onConfirmLabel} onClick={onConfirm} />
+          <Button primary label={onConfirmLabel} onClick={onConfirm} />
         </ModalFooter>
       </ModalWrapper>
     </ModalBackdrop>

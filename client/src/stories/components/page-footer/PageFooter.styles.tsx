@@ -14,4 +14,5 @@ export const StyledPageFooterWrapper = styled.div<PageFooterWrapperProps>`
     props.rightArea && props.leftArea ? 'space-between' : props.leftArea ? 'flex-start' : 'flex-end'};
   align-items: center;
   box-sizing: border-box;
+  padding: var(--page-footer-padding);
 `;

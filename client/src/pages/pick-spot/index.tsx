@@ -83,20 +83,22 @@ const PickSpotView: FC = () => {
             </DateInputsArea>
           </DateSelectorWrapper>
         </LocalizationProvider>
-        <SpotsWrapper isVisible={!!startDate}>
-          {freeSpots.length ? (
-            freeSpots.map((spot, idx) => (
-              <SpotItem
-                onClick={() => handlePickSpot(spot._id)}
-                key={idx}
-                spot={spot}
-                selected={pickedSpot === spot._id}
-              />
-            ))
-          ) : (
-            <Spinner label="Fetching places..." />
-          )}
-        </SpotsWrapper>
+        {startDate && (
+          <SpotsWrapper>
+            {freeSpots.length ? (
+              freeSpots.map((spot, idx) => (
+                <SpotItem
+                  onClick={() => handlePickSpot(spot._id)}
+                  key={idx}
+                  spot={spot}
+                  selected={pickedSpot === spot._id}
+                />
+              ))
+            ) : (
+              <Spinner label="Fetching places..." />
+            )}
+          </SpotsWrapper>
+        )}
       </PageContent>
       <PageFooter
         leftArea={<Button size="large" label="Back" onClick={() => navigate('/dashboard')} />}

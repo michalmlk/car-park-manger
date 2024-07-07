@@ -2,7 +2,7 @@ import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { Button } from '../../stories/components/button/Button.tsx';
 import { useNavigate } from 'react-router-dom';
 import { PageHeader } from '../../stories/components/page-header/PageHeader.tsx';
-import { DeleteOutline } from '@mui/icons-material';
+import { DeleteOutline, EditOutlined } from '@mui/icons-material';
 import { PageWrapper } from '../../stories/components/page-wrapper/PageWrapper.tsx';
 import { SpotsWrapper } from '../pick-spot/pick-spot.styles.tsx';
 import { Spinner } from '../../stories/components/loaders/Loaders.tsx';
@@ -30,7 +30,8 @@ const ReservationsOverview: FC = () => {
     isError,
   });
 
-  const { isOpen, toggleModal } = useModal();
+  const { isOpen: isDeleteModalOpen, toggleModal: toggleDeleteModal } = useModal();
+  const { isOpen: isEditModalOpen, toggleModal: toggleEditModal } = useModal();
 
   const handleDeleteReservation = useCallback(
     async (id: string): Promise<void> => {
@@ -44,23 +45,38 @@ const ReservationsOverview: FC = () => {
       } finally {
         handleSnackbarInvoke();
         setIsLoading(false);
-        toggleModal();
+        toggleDeleteModal();
       }
     },
-    [handleSnackbarInvoke, toggleModal],
+    [handleSnackbarInvoke, toggleDeleteModal],
   );
 
-  const ConfirmationModal = useMemo(
+  const handleEditReservation = (id: string): void => {};
+
+  const DeleteConfirmationModal = useMemo(
     () => (
       <Modal
-        onClose={toggleModal}
+        onClose={toggleDeleteModal}
         onConfirm={() => handleDeleteReservation(reservation)}
         onConfirmLabel="Delete"
         onCancelLabel="Cancel"
         title="Are you sure you want to delete reservation?"
       />
     ),
-    [handleDeleteReservation, reservation, toggleModal],
+    [handleDeleteReservation, reservation, toggleDeleteModal],
+  );
+
+  const EditModal = useMemo(
+    () => (
+      <Modal
+        onClose={toggleEditModal}
+        onConfirm={() => handleEditReservation(reservation)}
+        onConfirmLabel="Confirm"
+        onCancelLabel="Cancel"
+        title="Edit reservation"
+      ></Modal>
+    ),
+    [handleEditReservation, reservation, toggleEditModal],
   );
 
   useEffect(() => {
@@ -69,8 +85,9 @@ const ReservationsOverview: FC = () => {
 
   return (
     <PageWrapper>
-      <PageHeader title="Your current reservations" />
-      {isOpen && ConfirmationModal}
+      <PageHeader title="Active reservations" />
+      {isDeleteModalOpen && DeleteConfirmationModal}
+      {isEditModalOpen && EditModal}
       <PageContent>
         {renderSnackbar}
         <SpotsWrapper>
@@ -85,9 +102,16 @@ const ReservationsOverview: FC = () => {
                   {
                     action: () => {
                       setReservation(reservation._id);
-                      toggleModal();
+                      toggleDeleteModal();
                     },
                     icon: <DeleteOutline />,
+                  },
+                  {
+                    action: () => {
+                      setReservation(reservation._id);
+                      toggleEditModal();
+                    },
+                    icon: <EditOutlined />,
                   },
                 ]}
               />

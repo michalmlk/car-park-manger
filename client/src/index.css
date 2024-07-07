@@ -24,7 +24,11 @@
     --font-size-h1: 24px;
     --font-size-h3: 16px;
 
-    --page-content-padding: 1rem;
+    --page-header--padding: 0 1rem;
+
+    --page-content-padding: 0.5rem 1rem;
+
+    --page-footer-padding: 0 1rem;
 }
 
 * > {

@@ -9,6 +9,7 @@ export const StyledPageHeader = styled.div`
   max-width: 1280px;
   grid-area: header;
   justify-content: space-between;
+  padding: var(--page-header--padding);
 `;
 
 export const StyledTitleWrapper = styled.div`
