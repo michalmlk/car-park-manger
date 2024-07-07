@@ -30,25 +30,25 @@ const ReservationsOverview: FC = () => {
     isError,
   });
 
+  const { isOpen, toggleModal } = useModal();
+
   const handleDeleteReservation = useCallback(
     async (id: string): Promise<void> => {
       setIsLoading(true);
       try {
         await deleteReservation(id);
         setReservations((prev) => prev.filter((reservation) => reservation._id !== id));
-        handleSnackbarInvoke();
-        setIsLoading(false);
       } catch (e) {
         console.log(e);
         setIsError(true);
+      } finally {
         handleSnackbarInvoke();
         setIsLoading(false);
+        toggleModal();
       }
     },
-    [handleSnackbarInvoke],
+    [handleSnackbarInvoke, toggleModal],
   );
-
-  const { isOpen, toggleModal } = useModal();
 
   const ConfirmationModal = useMemo(
     () => (

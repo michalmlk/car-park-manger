@@ -7,12 +7,12 @@ import { PageContent } from '../../stories/components/page-content/PageContent.t
 import { Button } from '../../stories/components/button/Button.tsx';
 import { useUser } from '@clerk/clerk-react';
 import { Spinner } from '../../stories/components/loaders/Loaders.tsx';
-import { fetchParkingSpots } from '../../api/parkingSpotsApi.ts';
+import { collectFreeParkingSpotsByDate } from '../../api/parkingSpotsApi.ts';
 import { handleReserveSpot } from '../../api/reservationsApi.ts';
 import { ParkingSpotDTO } from '../../model/ParkingSpotModel.ts';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import dayjs, { Dayjs } from 'dayjs';
+import { Dayjs } from 'dayjs';
 import { DateInputsArea, DateSelectorWrapper, StyledDatePicker } from './components/DateSelectorWrapper.styles.tsx';
 import { PageHeader } from '../../stories/components/page-header/PageHeader.tsx';
 import { useNavigate } from 'react-router-dom';
@@ -22,14 +22,17 @@ const PickSpotView: FC = () => {
   const [freeSpots, setFreeSpots] = useState<ParkingSpotDTO[]>([]);
   const [pickedSpot, pickSpot] = useState<string | undefined>(undefined);
   const { user } = useUser();
+  const navigate = useNavigate();
+  const [startDate, setStartDate] = useState<Dayjs | null>(null);
 
   useEffect(() => {
-    fetchParkingSpots().then((data) => {
+    collectFreeParkingSpotsByDate(startDate).then((data) => {
       if (data) {
+        console.log(data);
         setFreeSpots(data);
       }
     });
-  }, []);
+  }, [startDate]);
 
   const handlePickSpot = (id: string) => {
     if (pickedSpot === id) {
@@ -61,15 +64,26 @@ const PickSpotView: FC = () => {
       }
     }
   };
-  const navigate = useNavigate();
-  const [startDate, setStartDate] = useState<Dayjs | null>(dayjs());
 
   return (
     <PageWrapper>
       <PageHeader title="Select place" />
       <PageContent>
         {renderSnackbar}
-        <SpotsWrapper>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DateSelectorWrapper>
+            <h2>Pick date</h2>
+            <DateInputsArea>
+              <StyledDatePicker
+                label="Date"
+                defaultValue={null}
+                value={startDate}
+                onChange={(newVal) => newVal && setStartDate(newVal)}
+              />
+            </DateInputsArea>
+          </DateSelectorWrapper>
+        </LocalizationProvider>
+        <SpotsWrapper isVisible={!!startDate}>
           {freeSpots.length ? (
             freeSpots.map((spot, idx) => (
               <SpotItem
@@ -83,19 +97,6 @@ const PickSpotView: FC = () => {
             <Spinner label="Fetching places..." />
           )}
         </SpotsWrapper>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DateSelectorWrapper isVisible={!!pickedSpot}>
-            <h2>Pick date</h2>
-            <DateInputsArea>
-              <StyledDatePicker
-                label="Date"
-                defaultValue={dayjs(new Date())}
-                value={startDate}
-                onChange={(newVal) => newVal && setStartDate(newVal)}
-              />
-            </DateInputsArea>
-          </DateSelectorWrapper>
-        </LocalizationProvider>
       </PageContent>
       <PageFooter
         leftArea={<Button size="large" label="Back" onClick={() => navigate('/dashboard')} />}
