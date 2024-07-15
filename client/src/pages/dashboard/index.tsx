@@ -23,10 +23,10 @@ const Dashboard: FC = () => {
   const navigate = useNavigate();
   const handleNavigatePickSpotView = (): void => navigate('/pick-spot');
   const handleNavigateManageReservationsView = (): void => navigate('/manage-reservations');
-
-  const { user } = useUser();
   const [overviewData, setOverviewData] = useState<OverviewData | undefined>();
   const [isLoading, setIsLoading] = useState(true);
+
+  const { user } = useUser();
 
   useEffect(() => {
     if (user) {

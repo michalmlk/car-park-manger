@@ -24,21 +24,6 @@ export const handleReserveSpot = async (parkingSpot: string, userId: string, sta
   }
 };
 
-export const fetchReservation = async (userId: string, today: Date): Promise<ReservationDTO | undefined> => {
-  if (userId) {
-    try {
-      const { data } = await axios.get(`http://localhost:3000/api/reservations/get/${userId}/${today.toISOString()}`);
-      return data;
-    } catch (e: unknown) {
-      if (isAxiosError(e)) {
-        console.log(`Failed to fetch reservation data, ${e.message}`);
-      } else if (e instanceof Error) {
-        console.log(e.message);
-      } else throw e;
-    }
-  }
-};
-
 export const fetchOverviewData = async (userId: string): Promise<OverviewData | undefined> => {
   if (userId) {
     try {

@@ -21,18 +21,21 @@ import { useSnackbar } from '../../hooks/useSnackbar.tsx';
 const PickSpotView: FC = () => {
   const [freeSpots, setFreeSpots] = useState<ParkingSpotDTO[]>([]);
   const [pickedSpot, pickSpot] = useState<string | undefined>(undefined);
-  const { user } = useUser();
   const navigate = useNavigate();
   const [startDate, setStartDate] = useState<Dayjs | null>(null);
+  const [isError, setIsError] = useState(false);
+
+  const { user } = useUser();
 
   useEffect(() => {
-    collectFreeParkingSpotsByDate(startDate).then((data) => {
-      if (data) {
-        console.log(data);
-        setFreeSpots(data);
-      }
-    });
+    collectFreeParkingSpotsByDate(startDate).then((data) => data && setFreeSpots(data));
   }, [startDate]);
+
+  const { handleSnackbarInvoke, renderSnackbar } = useSnackbar({
+    successMessage: 'Reservation created successfully',
+    errorMessage: 'Failed to create reservation',
+    isError,
+  });
 
   const handlePickSpot = (id: string) => {
     if (pickedSpot === id) {
@@ -41,14 +44,6 @@ const PickSpotView: FC = () => {
       pickSpot(id);
     }
   };
-
-  const [isError, setIsError] = useState(false);
-
-  const { handleSnackbarInvoke, renderSnackbar } = useSnackbar({
-    successMessage: 'Reservation created successfully',
-    errorMessage: 'Failed to create reservation',
-    isError,
-  });
 
   const handleCreateReservation = async (): Promise<void> => {
     if (pickedSpot && user && startDate) {
