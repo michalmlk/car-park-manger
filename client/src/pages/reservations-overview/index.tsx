@@ -2,7 +2,7 @@ import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { Button } from '../../stories/components/button/Button.tsx';
 import { useNavigate } from 'react-router-dom';
 import { PageHeader } from '../../stories/components/page-header/PageHeader.tsx';
-import { DeleteOutline, EditOutlined } from '@mui/icons-material';
+import { DeleteOutline } from '@mui/icons-material';
 import { PageWrapper } from '../../stories/components/page-wrapper/PageWrapper.tsx';
 import { SpotsWrapper } from '../pick-spot/pick-spot.styles.tsx';
 import { Spinner } from '../../stories/components/loaders/Loaders.tsx';
@@ -51,7 +51,9 @@ const ReservationsOverview: FC = () => {
     [handleSnackbarInvoke, toggleDeleteModal],
   );
 
-  const handleEditReservation = (id: string): void => {};
+  const handleEditReservation = useCallback((id: string): void => {
+    console.log(`TODO ${id}`);
+  }, []);
 
   const DeleteConfirmationModal = useMemo(
     () => (
@@ -105,14 +107,16 @@ const ReservationsOverview: FC = () => {
                       toggleDeleteModal();
                     },
                     icon: <DeleteOutline />,
+                    tooltipText: 'Delete reservation',
                   },
-                  {
-                    action: () => {
-                      setReservation(reservation._id);
-                      toggleEditModal();
-                    },
-                    icon: <EditOutlined />,
-                  },
+                  //TODO make reservation editable
+                  // {
+                  //   action: () => {
+                  //     setReservation(reservation._id);
+                  //     toggleEditModal();
+                  //   },
+                  //   icon: <EditOutlined />,
+                  // },
                 ]}
               />
             ))

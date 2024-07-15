@@ -1,5 +1,6 @@
 import axios, { isAxiosError } from 'axios';
 import { ReservationDTO } from '../model/ReservationModel.ts';
+import { OverviewData } from '../pages/dashboard';
 
 export const handleReserveSpot = async (parkingSpot: string, userId: string, startDate: Date): Promise<void> => {
   if (parkingSpot && startDate) {
@@ -31,6 +32,21 @@ export const fetchReservation = async (userId: string, today: Date): Promise<Res
     } catch (e: unknown) {
       if (isAxiosError(e)) {
         console.log(`Failed to fetch reservation data, ${e.message}`);
+      } else if (e instanceof Error) {
+        console.log(e.message);
+      } else throw e;
+    }
+  }
+};
+
+export const fetchOverviewData = async (userId: string): Promise<OverviewData | undefined> => {
+  if (userId) {
+    try {
+      const { data } = await axios.get(`http://localhost:3000/api/reservations/${userId}/overview`);
+      return data;
+    } catch (e: unknown) {
+      if (isAxiosError(e)) {
+        console.log(`Failed to fetch overview data, ${e.message}`);
       } else if (e instanceof Error) {
         console.log(e.message);
       } else throw e;

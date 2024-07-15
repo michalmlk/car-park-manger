@@ -85,6 +85,36 @@ reservationsRouter.get("/getAll/:userId", async (req, res) => {
   }
 });
 
+reservationsRouter.get("/:userId/overview", async (req, res) => {
+  const { userId } = req.params;
+  if (userId) {
+    const today = new Date();
+    today.setUTCHours(0, 0, 0, 0);
+    try {
+      const todaysReservation = await Reservation.find({
+        userId: {
+          $eq: userId,
+        },
+        startTime: {
+          $eq: today,
+        },
+      });
+
+      const nearest = await Reservation.find({
+        userId: {
+          $eq: userId,
+        },
+        startTime: {
+          $gt: today,
+        },
+      });
+      return res.status(200).json({ today: todaysReservation[0], nearest });
+    } catch (e) {
+      res.status(401).json({ error: "Failed to get reservations" });
+    }
+  }
+});
+
 reservationsRouter.get("/get/:userId/:date", async (req, res) => {
   const { userId, date } = req.params;
   if (userId) {

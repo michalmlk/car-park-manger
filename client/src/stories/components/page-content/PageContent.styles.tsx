@@ -5,4 +5,5 @@ export const StyledPageContent = styled.div`
   height: 100%;
   grid-area: content;
   padding: var(--page-content-padding);
+  max-width: 640px;
 `;

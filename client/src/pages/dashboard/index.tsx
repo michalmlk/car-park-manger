@@ -1,16 +1,23 @@
 import { FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../../stories/components/button/Button.tsx';
-import Overview from '../../components/current-reservation/CurrentReservation.tsx';
 import { ReservationDTO } from '../../model/ReservationModel.ts';
-import { fetchReservation } from '../../api/reservationsApi.ts';
+import { fetchOverviewData } from '../../api/reservationsApi.ts';
 import { useUser } from '@clerk/clerk-react';
 import { PageHeader } from '../../stories/components/page-header/PageHeader.tsx';
 import { PageWrapper } from '../../stories/components/page-wrapper/PageWrapper.tsx';
 import { Spinner } from '../../stories/components/loaders/Loaders.tsx';
-import { PageFooter } from '../../stories/components/page-footer/PageFooter.tsx';
 import { PageContent } from '../../stories/components/page-content/PageContent.tsx';
 import { OverviewWrapper } from './dashboard.styles.tsx';
+import { ManageSearch } from '@mui/icons-material';
+import CurrentReservation from '../../components/current-reservation/CurrentReservation.tsx';
+import NearestReservations from '../../components/nearest-reservations/NearestReservations.tsx';
+import { PageFooter } from '../../stories/components/page-footer/PageFooter.tsx';
+
+export interface OverviewData {
+  nearest: ReservationDTO[] | undefined;
+  today: ReservationDTO | undefined;
+}
 
 const Dashboard: FC = () => {
   const navigate = useNavigate();
@@ -18,13 +25,12 @@ const Dashboard: FC = () => {
   const handleNavigateManageReservationsView = (): void => navigate('/manage-reservations');
 
   const { user } = useUser();
-  const [overviewData, setOverviewData] = useState<ReservationDTO | undefined>(undefined);
+  const [overviewData, setOverviewData] = useState<OverviewData | undefined>();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (user) {
-      const today = new Date();
-      fetchReservation(user.id, today).then((data) => {
+      fetchOverviewData(user.id).then((data) => {
         if (data) {
           setOverviewData(data);
           setIsLoading(false);
@@ -33,23 +39,30 @@ const Dashboard: FC = () => {
         }
       });
     }
-  }, [user, overviewData?.status]);
+  }, [user]);
 
   return (
     <PageWrapper>
-      <PageHeader title={`Welcome back ${user?.fullName} ⚡`} />
-      <PageContent>
-        <OverviewWrapper>
-          {!isLoading ? <Overview overviewData={overviewData} isLoading={isLoading} /> : <Spinner />}
-          {!overviewData && <Button primary label="Create" onClick={() => navigate('/pick-spot')} />}
-        </OverviewWrapper>
-      </PageContent>
       {overviewData && (
-        <PageFooter
-          leftArea={<Button label="Manage" onClick={handleNavigateManageReservationsView} />}
-          rightArea={<Button primary label="Create new" onClick={handleNavigatePickSpotView} />}
+        <PageHeader
+          title="Dashboard"
+          actions={[
+            {
+              action: handleNavigateManageReservationsView,
+              icon: <ManageSearch />,
+              disabled: !overviewData?.nearest?.length && !overviewData.today,
+              tooltipText: 'Reservations overview',
+            },
+          ]}
         />
       )}
+      <PageContent>
+        <OverviewWrapper>
+          {!isLoading ? <CurrentReservation overviewData={overviewData?.today} isLoading={isLoading} /> : <Spinner />}
+          {!isLoading && <NearestReservations nearestReservations={overviewData?.nearest} />}
+        </OverviewWrapper>
+      </PageContent>
+      <PageFooter rightArea={<Button label="Create new" primary onClick={handleNavigatePickSpotView} />} />
     </PageWrapper>
   );
 };

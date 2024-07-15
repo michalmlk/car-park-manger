@@ -1,5 +1,5 @@
 import { StyledPageHeader, StyledTitleWrapper } from './PageHeader.styles.tsx';
-import { IconButton } from '@mui/material';
+import { IconButton, Tooltip } from '@mui/material';
 import { Action } from '../../../model/ActionModel.ts';
 import { ArrowBack } from '@mui/icons-material';
 
@@ -24,10 +24,12 @@ export function PageHeader({ title, actions, showActions = true, onBack, showBac
       </StyledTitleWrapper>
       {actions && showActions && (
         <div>
-          {actions.map(({ action, icon }, idx) => (
-            <IconButton key={idx} onClick={action}>
-              {icon}
-            </IconButton>
+          {actions.map(({ action, icon, disabled, tooltipText }, idx) => (
+            <Tooltip key={idx} title={tooltipText}>
+              <IconButton onClick={action} disabled={disabled}>
+                {icon}
+              </IconButton>
+            </Tooltip>
           ))}
         </div>
       )}

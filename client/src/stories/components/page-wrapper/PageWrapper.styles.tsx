@@ -12,6 +12,7 @@ export const StyledPageWrapper = styled.div`
   width: 100%;
   flex-grow: 1;
   align-items: center;
+  max-width: 640px;
 
   & > * {
     box-sizing: border-box;
