@@ -5,7 +5,6 @@ export const StyledCard = styled.div<CardProps>`
   width: 100%;
   box-sizing: border-box;
   padding: 20px;
-  //min-width: ${({ width }) => `${width}px`};
   border-radius: 8px;
   background-color: ${({ color }) => color};
   border: ${({ canBeSelected, selected, activeBorderColor }) =>

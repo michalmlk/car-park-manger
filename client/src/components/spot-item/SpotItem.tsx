@@ -12,14 +12,15 @@ export interface ParkingSpotDTO {
 
 interface SpotItemProps {
   spot: ParkingSpotDTO;
-  onClick: () => void;
+  onClick?: () => void;
   selected?: boolean;
+  compact?: boolean;
 }
 
-const SpotItem: FC<SpotItemProps> = ({ spot, onClick, selected = false }) => {
+const SpotItem: FC<SpotItemProps> = ({ spot, onClick, compact = false, selected = false }) => {
   return (
-    <Card width={600} onClick={onClick} selected={selected} canBeSelected>
-      <SpotItemContent>
+    <Card onClick={onClick} selected={selected} canBeSelected>
+      <SpotItemContent compact={compact}>
         <h2>Level {spot.level}</h2>
         <p>Place: {spot.number}</p>
       </SpotItemContent>

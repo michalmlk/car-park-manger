@@ -1,4 +1,5 @@
 export interface ReservationDTO {
+  _id: string;
   userId: string;
   parkingSpot: string;
   startTime: Date;

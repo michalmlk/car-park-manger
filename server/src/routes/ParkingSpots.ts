@@ -1,5 +1,6 @@
 import { Router } from "express";
 import ParkingSpot from "../config/model/ParkingSpot";
+import Reservation from "../config/model/Reservation";
 
 const parkingSpotsRouter = Router();
 
@@ -11,6 +12,37 @@ parkingSpotsRouter.get("/availableSpots", async (req, res) => {
       },
     });
     res.status(200).json(availableSpots);
+  } catch (e) {
+    res.status(401).json({ error: "No free spot found" });
+  }
+});
+
+parkingSpotsRouter.get("/availableSpots/:date", async (req, res) => {
+  const { date } = req.params;
+
+  const requestDate = new Date(date);
+  requestDate.setUTCHours(0, 0, 0, 0);
+
+  try {
+    const availableSpots = await ParkingSpot.find();
+
+    const reservationsOnCurrentDate = await Reservation.find({
+      startTime: {
+        $eq: requestDate,
+      },
+    });
+
+    const spotsIdOnRequestedDate = reservationsOnCurrentDate.map((r) =>
+      r.parkingSpot.toString(),
+    );
+
+    res
+      .status(200)
+      .json(
+        availableSpots.filter(
+          (spot) => !spotsIdOnRequestedDate.includes(spot._id.toString()),
+        ),
+      );
   } catch (e) {
     res.status(401).json({ error: "No free spot found" });
   }

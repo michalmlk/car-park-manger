@@ -1,9 +1,5 @@
 import { styled } from 'styled-components';
-import { DatePicker, DateTimePicker } from '@mui/x-date-pickers';
-
-export const StyledDateTimePicker = styled(DateTimePicker)`
-  flex-grow: 1;
-`;
+import { DatePicker } from '@mui/x-date-pickers';
 
 export const StyledDatePicker = styled(DatePicker)`
   flex-grow: 1;
@@ -18,19 +14,16 @@ export const DateInputsArea = styled.div`
   }
 `;
 
-export const DateSelectorWrapper = styled.div<{ isVisible?: boolean }>`
+export const DateSelectorWrapper = styled.div`
   display: flex;
-  visibility: ${(props) => (props.isVisible ? 'visible' : 'hidden')};
-  opacity: ${(props) => (props.isVisible ? 1 : 0)};
   box-sizing: border-box;
   width: 100%;
   flex-direction: column;
   align-items: flex-start;
   padding: 1rem;
-  gap: 2rem;
-  transition: all 0.2s ease;
+  margin-bottom: 2rem;
 
   h2 {
-    margin: 2rem 0;
+    margin: 1rem 0;
   }
 `;
