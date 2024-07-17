@@ -3,9 +3,8 @@ import ParkingSpot from "./config/model/ParkingSpot";
 import { DEMO_PLACES } from "./data/demo-places";
 
 async function main() {
-  await connect(
-    "mongodb+srv://michalmelka1:test123@carparkcluster.hcgagwl.mongodb.net/?retryWrites=true&w=majority&appName=CarParkCluster",
-  );
+  await connect();
+  //place your uri here,
   try {
     await ParkingSpot.insertMany(DEMO_PLACES);
     console.log("Demo data loades successfully");
