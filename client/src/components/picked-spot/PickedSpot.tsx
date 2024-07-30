@@ -5,7 +5,7 @@ import { ParkingSpotDTO } from '../../model/ParkingSpotModel.ts';
 import { ActionsWrapper, Details, DateWrapper, PlaceWrapper } from './PickedSpot.styles.tsx';
 import { Action } from '../../model/ActionModel.ts';
 import { IconButton, Tooltip } from '@mui/material';
-import { format } from 'date-fns/format';
+import { format } from 'date-fns';
 
 interface PickedSpotProps {
   parkingSpotId: string;

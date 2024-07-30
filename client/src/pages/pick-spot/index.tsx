@@ -74,6 +74,7 @@ const PickSpotView: FC = () => {
                 defaultValue={null}
                 value={startDate}
                 onChange={(newVal) => newVal && setStartDate(newVal)}
+                disablePast
               />
             </DateInputsArea>
           </DateSelectorWrapper>
