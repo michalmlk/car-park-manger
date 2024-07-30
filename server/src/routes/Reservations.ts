@@ -19,13 +19,13 @@ reservationsRouter.post("/create", async (req, res) => {
   const session = await mongoose.startSession();
   session.startTransaction();
 
-  try {
-    const startTime = new Date(req.body.startTime);
-    startTime.setUTCHours(0, 0, 0, 0);
+  const date = new Date(req.body.startTime);
+  date.setUTCHours(0, 0, 0, 0);
 
+  try {
     const existing = await Reservation.find({
       userId: req.body.userId,
-      startTime,
+      startTime: new Date(date),
     });
 
     if (existing[0]) {
@@ -33,11 +33,10 @@ reservationsRouter.post("/create", async (req, res) => {
         error: "You have already reserved another place at the same time.",
       });
     } else {
-      const startTime = new Date(req.body.startTime);
-      startTime.setUTCHours(0, 0, 0, 0);
       const newReservation = new Reservation({
         ...req.body,
-        startTime,
+        startTime: new Date(date),
+        endTime: new Date(date),
         status: "active",
       });
       await newReservation.save({ session });
@@ -90,6 +89,7 @@ reservationsRouter.get("/:userId/overview", async (req, res) => {
   if (userId) {
     const today = new Date();
     today.setUTCHours(0, 0, 0, 0);
+
     try {
       const todaysReservation = await Reservation.find({
         userId: {

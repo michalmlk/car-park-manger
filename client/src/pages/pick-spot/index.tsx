@@ -11,24 +11,24 @@ import { collectFreeParkingSpotsByDate } from '../../api/parkingSpotsApi.ts';
 import { handleReserveSpot } from '../../api/reservationsApi.ts';
 import { ParkingSpotDTO } from '../../model/ParkingSpotModel.ts';
 import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { Dayjs } from 'dayjs';
 import { DateInputsArea, DateSelectorWrapper, StyledDatePicker } from './components/DateSelectorWrapper.styles.tsx';
 import { PageHeader } from '../../stories/components/page-header/PageHeader.tsx';
 import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from '../../hooks/useSnackbar.tsx';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
 const PickSpotView: FC = () => {
   const [freeSpots, setFreeSpots] = useState<ParkingSpotDTO[]>([]);
   const [pickedSpot, pickSpot] = useState<string | undefined>(undefined);
   const navigate = useNavigate();
-  const [startDate, setStartDate] = useState<Dayjs | null>(null);
+  const [startDate, setStartDate] = useState<Date | null>(null);
   const [isError, setIsError] = useState(false);
 
   const { user } = useUser();
+  const today = new Date();
 
   useEffect(() => {
-    collectFreeParkingSpotsByDate(startDate).then((data) => data && setFreeSpots(data));
+    collectFreeParkingSpotsByDate(startDate || today).then((data) => data && setFreeSpots(data));
   }, [startDate]);
 
   const { handleSnackbarInvoke, renderSnackbar } = useSnackbar({
@@ -48,7 +48,7 @@ const PickSpotView: FC = () => {
   const handleCreateReservation = async (): Promise<void> => {
     if (pickedSpot && user && startDate) {
       try {
-        await handleReserveSpot(pickedSpot, user.id, startDate.toDate());
+        await handleReserveSpot(pickedSpot, user.id, startDate.getTime());
         setFreeSpots((prev) => prev.filter((spot) => spot._id !== pickedSpot));
         pickSpot(undefined);
         handleSnackbarInvoke();
@@ -65,7 +65,7 @@ const PickSpotView: FC = () => {
       <PageHeader title="Select place" />
       <PageContent>
         {renderSnackbar}
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
           <DateSelectorWrapper>
             <h2>Pick date</h2>
             <DateInputsArea>
