@@ -24,3 +24,5 @@ And from /client "npm run dev" and "npm start" from /server
 Wualah
 
 **Please not that this is the first iteration of the app and might be buggy, still in progress**
+
+To look at design system from /client run command "npm run storybook"
