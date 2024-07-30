@@ -2,14 +2,14 @@ import axios, { isAxiosError } from 'axios';
 import { ReservationDTO } from '../model/ReservationModel.ts';
 import { OverviewData } from '../pages/dashboard';
 
-export const handleReserveSpot = async (parkingSpot: string, userId: string, startTime: number): Promise<void> => {
-  if (parkingSpot && startTime) {
+export const handleReserveSpot = async (parkingSpot: string, userId: string, startDate: Date): Promise<void> => {
+  if (parkingSpot && startDate) {
     try {
       await axios.post('http://localhost:3000/api/reservations/create', {
         userId,
         parkingSpot,
-        startTime,
-        endTime: startTime,
+        startTime: startDate,
+        endTime: startDate,
       });
       console.log('Reservation created successfully');
     } catch (e: unknown) {
@@ -24,11 +24,10 @@ export const handleReserveSpot = async (parkingSpot: string, userId: string, sta
   }
 };
 
-export const fetchOverviewData = async (userId: string) => {
+export const fetchOverviewData = async (userId: string): Promise<OverviewData | undefined> => {
   if (userId) {
     try {
-      const { data } = await axios.get<OverviewData>(`http://localhost:3000/api/reservations/${userId}/overview`);
-      console.log(data);
+      const { data } = await axios.get(`http://localhost:3000/api/reservations/${userId}/overview`);
       return data;
     } catch (e: unknown) {
       if (isAxiosError(e)) {

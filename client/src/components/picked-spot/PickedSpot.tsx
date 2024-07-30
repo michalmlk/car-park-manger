@@ -5,12 +5,12 @@ import { ParkingSpotDTO } from '../../model/ParkingSpotModel.ts';
 import { ActionsWrapper, Details, DateWrapper, PlaceWrapper } from './PickedSpot.styles.tsx';
 import { Action } from '../../model/ActionModel.ts';
 import { IconButton, Tooltip } from '@mui/material';
-import { format } from 'date-fns';
+import { format } from 'date-fns/format';
 
 interface PickedSpotProps {
   parkingSpotId: string;
-  startTime: string;
-  endTime: string;
+  startTime: Date;
+  endTime: Date;
   actions?: Action[];
 }
 
@@ -28,7 +28,7 @@ const PickedSpot: FC<PickedSpotProps> = ({ parkingSpotId, startTime, actions }) 
     pickedSpotData && (
       <Card>
         <Details>
-          <DateWrapper>{format(new Date(startTime), 'dd MMM yyyy')}</DateWrapper>
+          <DateWrapper>{format(new Date(startTime), 'dd MMM yyyy')} </DateWrapper>
           <PlaceWrapper>
             <span>{pickedSpotData.level}</span>
             &nbsp;/&nbsp;
